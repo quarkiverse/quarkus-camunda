@@ -1,9 +1,8 @@
 ---
-name: "Zeebe"
+name: "Camunda"
 metadata:
   keywords:
   - "camunda"
-  - "zeebe"
   - "bpmn"
   categories:
     - "business automation"
