@@ -8,8 +8,6 @@ import io.quarkiverse.camunda.runtime.devmode.RecordsHandler;
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
-import io.quarkus.deployment.annotations.Consume;
-import io.quarkus.deployment.builditem.RuntimeConfigSetupCompleteBuildItem;
 import io.quarkus.devui.spi.JsonRPCProvidersBuildItem;
 import io.quarkus.devui.spi.page.CardPageBuildItem;
 import io.quarkus.devui.spi.page.MenuPageBuildItem;
@@ -25,7 +23,6 @@ public class DevUIProcessor {
     private static final String SUB_PATH_RECORDS = "records";
 
     @BuildStep(onlyIf = IsDevelopment.class)
-    @Consume(RuntimeConfigSetupCompleteBuildItem.class)
     public void pages(DevServiceBuildTimeConfig buildTimeConfig,
             BuildProducer<RouteBuildItem> routes,
             BuildProducer<CardPageBuildItem> cardsProducer,
