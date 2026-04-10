@@ -19,16 +19,7 @@ For instance, with Maven, add the following dependency to your POM file:
 </dependency>
 ----
 
-=== Upgrade
-
-[quote]
-In version `>=0.8.0` we replaced `@ZeebeWorker` with `@JobWorker` annotation.
-
-[quote]
-In version `>=0.7.0` we removed the hazelcast dependency and https://github.com/camunda-community-hub/zeebe-simple-monitor[zeebe-simple-monitor]
-for test and dev services. Now we do use https://github.com/camunda-community-hub/zeebe-test-container[zeebe-test-container] with https://github.com/camunda-community-hub/zeebe-test-container#debug-exporter[debug exporter]
-and https://github.com/lorislab/zeebe-dev-monitor[zeebe-dev-monitor]. In test module we remove our assert API and switch to Camunda https://github.com/camunda/zeebe-process-test/blob/main/assertions/src/main/java/io/camunda/zeebe/process/test/assertions/BpmnAssert.java[BpmnAssert]
-from https://github.com/camunda/zeebe-process-test[zeebe-process-test]. Test api migration: `io.quarkiverse.zeebe.test.BpmnAssert` -> `io.camunda.zeebe.process.test.assertions.BpmnAssert`
+include::./includes/migration-guide.adoc[]
 
 == Configuration
 
@@ -465,7 +456,7 @@ public class BaseIT extends BaseTest {
 ----
 For more information check examples in the `integration-tests` directory in this repo.
 
-### Testing with embedded engine
+=== Testing with embedded engine
 
 [quote]
 The Camunda process test embedded engine requires Java version >= 17
