@@ -7,7 +7,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.eclipse.microprofile.config.Config;
@@ -19,11 +23,15 @@ import org.testcontainers.utility.MountableFile;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import io.quarkiverse.camunda.DevServiceBuildTimeConfig;
-import io.quarkus.deployment.IsNormal;
+import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
-import io.quarkus.deployment.builditem.*;
+import io.quarkus.deployment.builditem.CuratedApplicationShutdownBuildItem;
+import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem.RunningDevService;
+import io.quarkus.deployment.builditem.DevServicesSharedNetworkBuildItem;
+import io.quarkus.deployment.builditem.DockerStatusBuildItem;
+import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.console.ConsoleInstalledBuildItem;
 import io.quarkus.deployment.console.StartupLogCompressor;
 import io.quarkus.deployment.logging.LoggingSetupBuildItem;
@@ -31,7 +39,8 @@ import io.quarkus.devservices.common.ConfigureUtil;
 import io.quarkus.devservices.common.ContainerAddress;
 import io.quarkus.devservices.common.ContainerLocator;
 import io.quarkus.runtime.configuration.ConfigUtils;
-import io.zeebe.containers.*;
+import io.zeebe.containers.ZeebeContainer;
+import io.zeebe.containers.ZeebePort;
 import io.zeebe.containers.util.HostPortForwarder;
 
 public class DevServiceProcessor {
@@ -54,7 +63,8 @@ public class DevServiceProcessor {
     static volatile ZeebeDevServiceCfg cfg;
     static volatile boolean first = true;
 
-    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = { io.quarkus.deployment.dev.devservices.DevServicesConfig.Enabled.class })
+    @BuildStep(onlyIfNot = IsProduction.class, onlyIf = {
+            io.quarkus.deployment.dev.devservices.DevServicesConfig.Enabled.class })
     public DevServicesResultBuildItem startZeebeContainers(LaunchModeBuildItem launchMode,
             List<DevServicesSharedNetworkBuildItem> devServicesSharedNetworkBuildItem,
             DevServiceBuildTimeConfig buildTimeConfig,

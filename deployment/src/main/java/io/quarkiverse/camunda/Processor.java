@@ -67,6 +67,7 @@ public class Processor {
 
     private static final String JAR_RESOURCE_PROTOCOL = "jar";
     private static final String FILE_RESOURCE_PROTOCOL = "file";
+    private static final String DOT_SEPARATOR = ".";
 
     static final String INVOKER_SUFFIX = "_JobWorkerInvoker";
 
@@ -422,17 +423,18 @@ public class Processor {
 
         String baseName;
         if (implClazz.enclosingClass() != null) {
-            baseName = io.quarkus.arc.processor.DotNames.simpleName(implClazz.enclosingClass()) + NESTED_SEPARATOR
-                    + io.quarkus.arc.processor.DotNames.simpleName(implClazz);
+            baseName = implClazz.enclosingClass().withoutPackagePrefix() + NESTED_SEPARATOR
+                    + implClazz.name().withoutPackagePrefix();
         } else {
-            baseName = io.quarkus.arc.processor.DotNames.simpleName(implClazz.name());
+            baseName = implClazz.name().withoutPackagePrefix();
         }
         StringBuilder sigBuilder = new StringBuilder();
         sigBuilder.append(method.name()).append("_").append(method.returnType().name().toString());
         for (org.jboss.jandex.Type i : method.parameterTypes()) {
             sigBuilder.append(i.name().toString());
         }
-        String generatedName = io.quarkus.arc.processor.DotNames.internalPackageNameWithTrailingSlash(implClazz.name())
+        String generatedName = implClazz.name().packagePrefixName()
+                + DOT_SEPARATOR
                 + baseName
                 + INVOKER_SUFFIX + "_" + method.name() + "_"
                 + HashUtil.sha1(sigBuilder.toString());

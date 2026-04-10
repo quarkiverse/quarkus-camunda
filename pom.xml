@@ -23,7 +23,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <quarkus.version>3.20.5</quarkus.version>
+    <quarkus.version>3.34.3</quarkus.version>
     <camunda.version>8.5.15</camunda.version>
     <zeebe.testcontainers.version>3.6.5</zeebe.testcontainers.version>
     <quarkus-mockserver.version>1.16.0</quarkus-mockserver.version>
@@ -86,6 +86,7 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-maven-plugin</artifactId>
           <version>${quarkus.version}</version>
+          <extensions>true</extensions>
         </plugin>
         <plugin>
           <groupId>io.quarkus</groupId>
