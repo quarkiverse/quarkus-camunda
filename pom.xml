@@ -6,9 +6,9 @@
     <artifactId>quarkiverse-parent</artifactId>
     <version>21</version>
   </parent>
-  <groupId>io.quarkiverse.zeebe</groupId>
-  <artifactId>quarkus-zeebe-parent</artifactId>
-  <name>Quarkus - Zeebe - Parent</name>
+  <groupId>io.quarkiverse.camunda</groupId>
+  <artifactId>quarkus-camunda-parent</artifactId>
+  <name>Quarkus - Camunda - Parent</name>
   <version>999-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
@@ -24,7 +24,7 @@
   </scm>
   <properties>
     <quarkus.version>3.20.5</quarkus.version>
-    <zeebe.version>8.5.15</zeebe.version>
+    <camunda.version>8.5.15</camunda.version>
     <zeebe.testcontainers.version>3.6.5</zeebe.testcontainers.version>
     <quarkus-mockserver.version>1.16.0</quarkus-mockserver.version>
   </properties>
@@ -40,7 +40,7 @@
       <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>zeebe-client-java</artifactId>
-        <version>${zeebe.version}</version>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.zeebe</groupId>
@@ -50,22 +50,22 @@
       <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>zeebe-process-test-api</artifactId>
-        <version>${zeebe.version}</version>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>zeebe-process-test-assertions</artifactId>
-        <version>${zeebe.version}</version>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>zeebe-process-test-engine</artifactId>
-        <version>${zeebe.version}</version>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>zeebe-protocol-jackson</artifactId>
-        <version>${zeebe.version}</version>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.quarkiverse.mockserver</groupId>

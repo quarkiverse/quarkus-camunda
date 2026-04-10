@@ -1,5 +1,5 @@
-name: quarkus-zeebe
-title: Zeebe
+name: quarkus-camunda
+title: Camunda
 version: dev
 nav:
   - modules/ROOT/nav.adoc
