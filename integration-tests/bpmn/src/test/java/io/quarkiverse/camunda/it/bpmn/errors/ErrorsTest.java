@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
 import io.camunda.zeebe.process.test.assertions.IncidentAssert;
 import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
 import io.camunda.zeebe.protocol.record.value.ErrorType;
@@ -22,7 +22,7 @@ import io.quarkus.test.junit.QuarkusTest;
 public class ErrorsTest extends AbstractTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     private final static String FAIL_PROCESS_ID = "fail-process";
     private final static String THROW_ERROR_PROCESS_ID = "throw-zeebe-error-process";

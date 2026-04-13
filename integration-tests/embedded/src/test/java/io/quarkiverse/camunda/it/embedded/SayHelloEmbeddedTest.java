@@ -7,8 +7,8 @@ import static org.awaitility.Awaitility.await;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
 import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
 import io.quarkiverse.camunda.test.CamundaTestEmbeddedResource;
 import io.quarkiverse.camunda.test.InjectCamundaClient;
@@ -21,7 +21,7 @@ import io.quarkus.test.junit.QuarkusTest;
 public class SayHelloEmbeddedTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     @Test
     @DisplayName("Start process")

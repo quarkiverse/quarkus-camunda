@@ -1,16 +1,21 @@
 package io.quarkiverse.camunda.runtime;
 
-import io.camunda.zeebe.client.CredentialsProvider;
-import io.camunda.zeebe.client.api.JsonMapper;
-import io.camunda.zeebe.client.impl.ZeebeClientBuilderImpl;
-import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
+import java.net.URI;
+
+import io.camunda.client.CredentialsProvider;
+import io.camunda.client.api.JsonMapper;
+import io.camunda.client.impl.CamundaClientBuilderImpl;
+import io.camunda.client.impl.oauth.OAuthCredentialsProviderBuilder;
+import org.jboss.logging.Logger;
 
 public class ClientBuilderFactory {
 
-    public static ZeebeClientBuilderImpl createBuilder(ClientRuntimeConfig config, JsonMapper jsonMapper) {
-        ZeebeClientBuilderImpl builder = new ZeebeClientBuilderImpl();
+    private static final Logger log = Logger.getLogger(ClientBuilderFactory.class);
 
-        builder.gatewayAddress(createGatewayAddress(config))
+    public static CamundaClientBuilderImpl createBuilder(ClientRuntimeConfig config, JsonMapper jsonMapper) {
+        CamundaClientBuilderImpl builder = new CamundaClientBuilderImpl();
+
+        builder.grpcAddress(createGatewayAddress(config))
                 .restAddress(config.broker().restAddress())
                 .defaultTenantId(config.tenant().defaultTenantId())
                 .defaultJobWorkerTenantIds(config.tenant().defaultJobWorkerTenantIds())
@@ -26,8 +31,9 @@ public class ClientBuilderFactory {
 
         config.security().overrideAuthority().ifPresent(builder::overrideAuthority);
         config.security().certPath().ifPresent(builder::caCertificatePath);
-        if (config.security().plaintext()) {
-            builder.usePlaintext();
+        if (config.broker().useGRPC()) {
+            builder.preferRestOverGrpc(false);
+            log.info("Using gRPC for Camunda client");
         }
         if (jsonMapper != null) {
             builder.withJsonMapper(jsonMapper);
@@ -35,13 +41,13 @@ public class ClientBuilderFactory {
         return builder;
     }
 
-    private static String createGatewayAddress(ClientRuntimeConfig config) {
+    private static URI createGatewayAddress(ClientRuntimeConfig config) {
         if (config.cloud().clusterId().isPresent()) {
-            return String.format("%s.%s.%s:%d",
+            return URI.create(String.format("%s.%s.%s:%d",
                     config.cloud().clusterId().get(),
                     config.cloud().region(),
                     config.cloud().baseUrl(),
-                    config.cloud().port());
+                    config.cloud().port()));
         }
         return config.broker().gatewayAddress();
     }
@@ -78,15 +84,7 @@ public class ClientBuilderFactory {
 
     private static String createOauthAudience(ClientRuntimeConfig config) {
         return config.oauth().tokenAudience().orElseGet(
-                () -> removePortFromAddress(config.broker().gatewayAddress()));
-    }
-
-    private static String removePortFromAddress(String address) {
-        int index = address.lastIndexOf(':');
-        if (index > 0) {
-            return address.substring(0, index);
-        }
-        return address;
+                () -> config.broker().gatewayAddress().getHost());
     }
 
 }

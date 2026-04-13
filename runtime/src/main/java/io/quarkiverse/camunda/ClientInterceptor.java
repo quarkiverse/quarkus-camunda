@@ -6,7 +6,7 @@ import io.grpc.ClientCall;
 import io.grpc.MethodDescriptor;
 
 /**
- * Zeebe client interceptor qualifier for class which implements <b>ZeebeClientInterceptor</b> interface.
+ * Zeebe client interceptor qualifier for class which implements <b>CamundaClientInterceptor</b> interface.
  *
  * @see io.grpc.ClientInterceptor
  */

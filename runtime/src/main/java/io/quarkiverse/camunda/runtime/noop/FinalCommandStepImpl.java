@@ -2,8 +2,8 @@ package io.quarkiverse.camunda.runtime.noop;
 
 import java.time.Duration;
 
-import io.camunda.zeebe.client.api.ZeebeFuture;
-import io.camunda.zeebe.client.api.command.FinalCommandStep;
+import io.camunda.client.api.CamundaFuture;
+import io.camunda.client.api.command.FinalCommandStep;
 
 public class FinalCommandStepImpl<T> implements FinalCommandStep<T> {
 
@@ -19,7 +19,7 @@ public class FinalCommandStepImpl<T> implements FinalCommandStep<T> {
     }
 
     @Override
-    public ZeebeFuture<T> send() {
+    public CamundaFuture<T> send() {
         return new FutureImpl<>(data);
     }
 }

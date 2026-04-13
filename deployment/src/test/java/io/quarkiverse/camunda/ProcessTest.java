@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.api.response.ProcessInstanceEvent;
 import io.quarkiverse.camunda.jobworker.Parameter;
 import io.quarkiverse.camunda.jobworker.TestJobWorker;
 import io.quarkiverse.camunda.test.TestService;

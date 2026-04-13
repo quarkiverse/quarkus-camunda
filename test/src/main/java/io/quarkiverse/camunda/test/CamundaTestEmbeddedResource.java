@@ -7,7 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 import io.camunda.zeebe.process.test.api.RecordStreamSource;
 import io.camunda.zeebe.process.test.api.ZeebeTestEngine;
 import io.camunda.zeebe.process.test.assertions.BpmnAssert;
@@ -23,7 +23,7 @@ public class CamundaTestEmbeddedResource implements QuarkusTestResourceLifecycle
 
     public static ZeebeTestEngine ZEEBE_ENGINE;
 
-    static ZeebeClient CLIENT;
+    static CamundaClient CLIENT;
 
     @Override
     public Map<String, String> start() {
@@ -45,7 +45,7 @@ public class CamundaTestEmbeddedResource implements QuarkusTestResourceLifecycle
     @Override
     public void inject(TestInjector testInjector) {
         testInjector.injectIntoFields(CLIENT,
-                new TestInjector.AnnotatedAndMatchesType(InjectCamundaClient.class, ZeebeClient.class));
+                new TestInjector.AnnotatedAndMatchesType(InjectCamundaClient.class, CamundaClient.class));
         testInjector.injectIntoFields(ZEEBE_ENGINE,
                 new TestInjector.AnnotatedAndMatchesType(InjectCamundaTestEngine.class, ZeebeTestEngine.class));
     }

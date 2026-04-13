@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
 import io.camunda.zeebe.process.test.assertions.BpmnAssert;
 import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
 import io.quarkiverse.camunda.it.bpmn.AbstractTest;
@@ -20,7 +20,7 @@ import io.quarkus.test.junit.QuarkusTest;
 public class GatewayTest extends AbstractTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     private final static String BPM_PROCESS_ID = "gateway";
 

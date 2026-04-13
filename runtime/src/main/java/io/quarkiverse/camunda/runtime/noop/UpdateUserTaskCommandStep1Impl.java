@@ -2,8 +2,8 @@ package io.quarkiverse.camunda.runtime.noop;
 
 import java.util.List;
 
-import io.camunda.zeebe.client.api.command.UpdateUserTaskCommandStep1;
-import io.camunda.zeebe.client.api.response.UpdateUserTaskResponse;
+import io.camunda.client.api.command.UpdateUserTaskCommandStep1;
+import io.camunda.client.api.response.UpdateUserTaskResponse;
 
 public class UpdateUserTaskCommandStep1Impl extends AbstractStep<UpdateUserTaskResponse> implements UpdateUserTaskCommandStep1 {
     @Override

@@ -2,9 +2,9 @@ package io.quarkiverse.camunda.runtime.noop;
 
 import java.util.concurrent.TimeUnit;
 
-import io.camunda.zeebe.client.impl.http.HttpZeebeFuture;
+import io.camunda.client.impl.http.HttpCamundaFuture;
 
-public class FutureImpl<T> extends HttpZeebeFuture<T> {
+public class FutureImpl<T> extends HttpCamundaFuture<T> {
 
     private final T response;
 

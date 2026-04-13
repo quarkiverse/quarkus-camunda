@@ -1,7 +1,7 @@
 package io.quarkiverse.camunda.runtime.noop;
 
-import io.camunda.zeebe.client.api.command.UnassignUserTaskCommandStep1;
-import io.camunda.zeebe.client.api.response.UnassignUserTaskResponse;
+import io.camunda.client.api.command.UnassignUserTaskCommandStep1;
+import io.camunda.client.api.response.UnassignUserTaskResponse;
 
 public class UnassignUserTaskCommandStep1Impl extends AbstractStep<UnassignUserTaskResponse>
         implements UnassignUserTaskCommandStep1 {

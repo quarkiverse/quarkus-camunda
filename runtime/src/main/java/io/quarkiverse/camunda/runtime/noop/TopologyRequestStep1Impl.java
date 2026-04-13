@@ -1,8 +1,8 @@
 package io.quarkiverse.camunda.runtime.noop;
 
-import io.camunda.zeebe.client.api.command.TopologyRequestStep1;
-import io.camunda.zeebe.client.api.response.Topology;
-import io.camunda.zeebe.client.impl.response.TopologyImpl;
+import io.camunda.client.api.command.TopologyRequestStep1;
+import io.camunda.client.api.response.Topology;
+import io.camunda.client.impl.response.TopologyImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class TopologyRequestStep1Impl extends AbstractStep<Topology> implements TopologyRequestStep1 {

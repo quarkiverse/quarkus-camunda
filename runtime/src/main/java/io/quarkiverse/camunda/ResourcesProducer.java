@@ -3,8 +3,8 @@ package io.quarkiverse.camunda;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
 
-import io.camunda.zeebe.client.api.JsonMapper;
-import io.camunda.zeebe.client.impl.ZeebeObjectMapper;
+import io.camunda.client.api.JsonMapper;
+import io.camunda.client.impl.CamundaObjectMapper;
 import io.quarkus.arc.DefaultBean;
 import io.quarkus.arc.Unremovable;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -17,7 +17,7 @@ public class ResourcesProducer {
     @Unremovable
     @DefaultBean
     public JsonMapper defaultJsonMapper() {
-        return new ZeebeObjectMapper();
+        return new CamundaObjectMapper();
     }
 
     @Produces

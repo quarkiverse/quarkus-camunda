@@ -10,13 +10,13 @@ import java.util.stream.Stream;
 
 import org.jboss.logging.Logger;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.command.DeployResourceCommandStep1;
-import io.camunda.zeebe.client.api.response.DeploymentEvent;
-import io.camunda.zeebe.client.api.worker.BackoffSupplier;
-import io.camunda.zeebe.client.api.worker.ExponentialBackoffBuilder;
-import io.camunda.zeebe.client.api.worker.JobWorker;
-import io.camunda.zeebe.client.api.worker.JobWorkerBuilderStep1;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.command.DeployResourceCommandStep1;
+import io.camunda.client.api.response.DeploymentEvent;
+import io.camunda.client.api.worker.BackoffSupplier;
+import io.camunda.client.api.worker.ExponentialBackoffBuilder;
+import io.camunda.client.api.worker.JobWorker;
+import io.camunda.client.api.worker.JobWorkerBuilderStep1;
 import io.quarkiverse.camunda.JobWorkerExceptionHandler;
 import io.quarkiverse.camunda.runtime.metrics.MetricsRecorder;
 import io.quarkiverse.camunda.runtime.tracing.Tracing;
@@ -40,7 +40,7 @@ public class Recorder {
      */
     public void init(Collection<String> resources, List<JobWorkerMetadata> workers) {
         // client configuration
-        ZeebeClient client = Arc.container().instance(ZeebeClient.class).get();
+        CamundaClient client = Arc.container().instance(CamundaClient.class).get();
         final RuntimeConfig config = runtimeConfig.getValue();
 
         // tracing configuration
@@ -124,7 +124,7 @@ public class Recorder {
         return type;
     }
 
-    private static JobWorker buildJobWorker(ZeebeClient client,
+    private static JobWorker buildJobWorker(CamundaClient client,
             ClientRuntimeConfig config,
             JobWorkerExceptionHandler exceptionHandler, JobWorkerMetadata meta, MetricsRecorder metricsRecorder,
             TracingRecorder tracingRecorder, Set<String> tracingVariables, String type) {

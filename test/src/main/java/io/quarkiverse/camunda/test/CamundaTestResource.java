@@ -8,8 +8,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.impl.ZeebeClientBuilderImpl;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.impl.CamundaClientBuilderImpl;
 import io.camunda.zeebe.process.test.api.RecordStreamSource;
 import io.camunda.zeebe.process.test.assertions.BpmnAssert;
 import io.camunda.zeebe.process.test.filters.RecordStream;
@@ -22,7 +22,7 @@ public class CamundaTestResource implements QuarkusTestResourceLifecycleManager,
 
     private static final Logger log = LoggerFactory.getLogger(CamundaTestResource.class);
 
-    static ZeebeClient CLIENT;
+    static CamundaClient CLIENT;
 
     static final List<Record<?>> RECORDS = new CopyOnWriteArrayList<>();
 
@@ -43,7 +43,7 @@ public class CamundaTestResource implements QuarkusTestResourceLifecycleManager,
     @Override
     public void inject(TestInjector testInjector) {
         testInjector.injectIntoFields(CLIENT,
-                new TestInjector.AnnotatedAndMatchesType(InjectCamundaClient.class, ZeebeClient.class));
+                new TestInjector.AnnotatedAndMatchesType(InjectCamundaClient.class, CamundaClient.class));
     }
 
     @Override
@@ -71,8 +71,8 @@ public class CamundaTestResource implements QuarkusTestResourceLifecycleManager,
         }
     }
 
-    private static ZeebeClient createClient(String gateway, String restAddress) {
-        return new ZeebeClientBuilderImpl().gatewayAddress(gateway).usePlaintext()
+    private static CamundaClient createClient(String gateway, String restAddress) {
+        return new CamundaClientBuilderImpl().gatewayAddress(gateway).usePlaintext()
                 .restAddress(URI.create(restAddress)).build();
     }
 }

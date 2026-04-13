@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
-import io.camunda.zeebe.client.api.JsonMapper;
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.client.api.JsonMapper;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobClient;
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.InjectableContext;
 import io.quarkus.arc.ManagedContext;
