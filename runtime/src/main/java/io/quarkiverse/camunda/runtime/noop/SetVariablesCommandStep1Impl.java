@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.SetVariablesCommandStep1;
-import io.camunda.zeebe.client.api.response.SetVariablesResponse;
-import io.camunda.zeebe.client.impl.response.SetVariablesResponseImpl;
+import io.camunda.client.api.command.SetVariablesCommandStep1;
+import io.camunda.client.api.response.SetVariablesResponse;
+import io.camunda.client.impl.response.SetVariablesResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class SetVariablesCommandStep1Impl extends AbstractStep<SetVariablesResponse>

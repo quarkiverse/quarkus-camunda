@@ -12,15 +12,15 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
 
 @Path("process/test")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProcessRestController {
 
     @Inject
-    ZeebeClient zeebe;
+    CamundaClient zeebe;
 
     @GET
     public Response startTests() {

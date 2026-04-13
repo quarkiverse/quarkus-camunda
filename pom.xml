@@ -24,8 +24,8 @@
   </scm>
   <properties>
     <quarkus.version>3.34.3</quarkus.version>
-    <camunda.version>8.5.15</camunda.version>
-    <zeebe.testcontainers.version>3.6.5</zeebe.testcontainers.version>
+    <camunda.version>8.9.0</camunda.version>
+    <zeebe.testcontainers.version>3.6.9</zeebe.testcontainers.version>
     <quarkus-mockserver.version>1.16.0</quarkus-mockserver.version>
   </properties>
   <dependencyManagement>
@@ -39,7 +39,7 @@
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
-        <artifactId>zeebe-client-java</artifactId>
+        <artifactId>camunda-client-java</artifactId>
         <version>${camunda.version}</version>
       </dependency>
       <dependency>
@@ -49,17 +49,7 @@
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
-        <artifactId>zeebe-process-test-api</artifactId>
-        <version>${camunda.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.camunda</groupId>
-        <artifactId>zeebe-process-test-assertions</artifactId>
-        <version>${camunda.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.camunda</groupId>
-        <artifactId>zeebe-process-test-engine</artifactId>
+        <artifactId>camunda-process-test-java</artifactId>
         <version>${camunda.version}</version>
       </dependency>
       <dependency>

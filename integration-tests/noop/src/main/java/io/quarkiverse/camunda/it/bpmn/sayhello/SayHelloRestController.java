@@ -10,8 +10,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceResult;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceResult;
 
 @Path("say-hello")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -19,7 +19,7 @@ import io.camunda.zeebe.client.api.response.ProcessInstanceResult;
 public class SayHelloRestController {
 
     @Inject
-    ZeebeClient client;
+    CamundaClient client;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

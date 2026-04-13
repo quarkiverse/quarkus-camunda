@@ -8,7 +8,7 @@ import java.util.Map;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import io.camunda.zeebe.client.api.JsonMapper;
+import io.camunda.client.api.JsonMapper;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 import io.grpc.CallOptions;
 import io.grpc.Channel;

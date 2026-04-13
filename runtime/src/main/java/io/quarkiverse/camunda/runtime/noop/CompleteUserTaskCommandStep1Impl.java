@@ -2,8 +2,8 @@ package io.quarkiverse.camunda.runtime.noop;
 
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.CompleteUserTaskCommandStep1;
-import io.camunda.zeebe.client.api.response.CompleteUserTaskResponse;
+import io.camunda.client.api.command.CompleteUserTaskCommandStep1;
+import io.camunda.client.api.response.CompleteUserTaskResponse;
 
 public class CompleteUserTaskCommandStep1Impl extends AbstractStep<CompleteUserTaskResponse>
         implements CompleteUserTaskCommandStep1 {

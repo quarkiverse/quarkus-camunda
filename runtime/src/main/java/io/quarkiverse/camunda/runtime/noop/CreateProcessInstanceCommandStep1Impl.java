@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.CreateProcessInstanceCommandStep1;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
-import io.camunda.zeebe.client.impl.response.CreateProcessInstanceResponseImpl;
+import io.camunda.client.api.command.CreateProcessInstanceCommandStep1;
+import io.camunda.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.impl.response.CreateProcessInstanceResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class CreateProcessInstanceCommandStep1Impl extends AbstractStep<ProcessInstanceEvent>

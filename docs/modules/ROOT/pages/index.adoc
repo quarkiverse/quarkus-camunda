@@ -424,14 +424,14 @@ Test example
 ----
 import io.quarkiverse.camunda.test.CamundaTestResource;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 
 @QuarkusTest
 @QuarkusTestResource(CamundaTestResource.class)
 public class BaseTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     @Test
     public void startProcessTest() {
@@ -465,14 +465,14 @@ The Camunda process test embedded engine requires Java version >= 17
 ----
 import io.quarkiverse.camunda.test.CamundaTestEmbeddedResource;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 
 @QuarkusTest
 @QuarkusTestResource(CamundaTestEmbeddedResource.class)
 public class BaseTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     @Test
     public void startProcessTest() {

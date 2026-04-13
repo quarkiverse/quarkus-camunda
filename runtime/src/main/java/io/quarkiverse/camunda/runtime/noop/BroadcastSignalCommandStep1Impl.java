@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.BroadcastSignalCommandStep1;
-import io.camunda.zeebe.client.api.response.BroadcastSignalResponse;
-import io.camunda.zeebe.client.impl.response.BroadcastSignalResponseImpl;
+import io.camunda.client.api.command.BroadcastSignalCommandStep1;
+import io.camunda.client.api.response.BroadcastSignalResponse;
+import io.camunda.client.impl.response.BroadcastSignalResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class BroadcastSignalCommandStep1Impl extends AbstractStep<BroadcastSignalResponse>

@@ -8,12 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.jboss.logging.Logger;
 
-import io.camunda.zeebe.client.api.command.CompleteJobCommandStep1;
-import io.camunda.zeebe.client.api.command.FinalCommandStep;
-import io.camunda.zeebe.client.api.command.ThrowErrorCommandStep1;
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.BackoffSupplier;
-import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.client.api.command.CompleteJobCommandStep1;
+import io.camunda.client.api.command.FinalCommandStep;
+import io.camunda.client.api.command.ThrowErrorCommandStep1;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.BackoffSupplier;
+import io.camunda.client.api.worker.JobClient;
 import io.quarkiverse.camunda.BpmnError;
 import io.quarkiverse.camunda.JobWorkerExceptionHandler;
 import io.quarkiverse.camunda.runtime.metrics.MetricsRecorder;

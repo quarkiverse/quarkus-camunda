@@ -5,8 +5,8 @@ import java.util.Map;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobClient;
 import io.quarkiverse.camunda.CustomHeaders;
 import io.quarkiverse.camunda.JobWorker;
 import io.quarkiverse.camunda.Variable;

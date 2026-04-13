@@ -1,14 +1,14 @@
 package io.quarkiverse.camunda.runtime;
 
-import io.camunda.zeebe.client.CredentialsProvider;
-import io.camunda.zeebe.client.api.JsonMapper;
-import io.camunda.zeebe.client.impl.ZeebeClientBuilderImpl;
-import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
+import io.camunda.client.CredentialsProvider;
+import io.camunda.client.api.JsonMapper;
+import io.camunda.client.impl.CamundaClientBuilderImpl;
+import io.camunda.client.impl.oauth.OAuthCredentialsProviderBuilder;
 
 public class ClientBuilderFactory {
 
-    public static ZeebeClientBuilderImpl createBuilder(ClientRuntimeConfig config, JsonMapper jsonMapper) {
-        ZeebeClientBuilderImpl builder = new ZeebeClientBuilderImpl();
+    public static CamundaClientBuilderImpl createBuilder(ClientRuntimeConfig config, JsonMapper jsonMapper) {
+        CamundaClientBuilderImpl builder = new CamundaClientBuilderImpl();
 
         builder.gatewayAddress(createGatewayAddress(config))
                 .restAddress(config.broker().restAddress())

@@ -5,8 +5,8 @@ import java.util.Map;
 
 import jakarta.enterprise.inject.Produces;
 
-import io.camunda.zeebe.client.api.JsonMapper;
-import io.camunda.zeebe.client.impl.ZeebeObjectMapper;
+import io.camunda.client.api.JsonMapper;
+import io.camunda.client.impl.CamundaObjectMapper;
 import io.quarkus.logging.Log;
 
 public class CustomJsonMapperProducer {
@@ -15,7 +15,7 @@ public class CustomJsonMapperProducer {
     public JsonMapper create() {
         return new JsonMapper() {
 
-            private ZeebeObjectMapper mapper = new ZeebeObjectMapper();
+            private CamundaObjectMapper mapper = new CamundaObjectMapper();
 
             @Override
             public <T> T fromJson(String json, Class<T> typeClass) {

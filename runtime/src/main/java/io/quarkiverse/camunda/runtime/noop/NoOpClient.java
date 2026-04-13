@@ -1,13 +1,13 @@
 package io.quarkiverse.camunda.runtime.noop;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.ZeebeClientConfiguration;
-import io.camunda.zeebe.client.api.command.*;
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.JobWorkerBuilderStep1;
-import io.camunda.zeebe.client.impl.ZeebeClientBuilderImpl;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.CamundaClientConfiguration;
+import io.camunda.client.api.command.*;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobWorkerBuilderStep1;
+import io.camunda.client.impl.CamundaClientBuilderImpl;
 
-public class NoOpClient implements ZeebeClient {
+public class NoOpClient implements CamundaClient {
 
     @Override
     public TopologyRequestStep1 newTopologyRequest() {
@@ -15,8 +15,8 @@ public class NoOpClient implements ZeebeClient {
     }
 
     @Override
-    public ZeebeClientConfiguration getConfiguration() {
-        return new ZeebeClientBuilderImpl();
+    public CamundaClientConfiguration getConfiguration() {
+        return new CamundaClientBuilderImpl();
     }
 
     @Override

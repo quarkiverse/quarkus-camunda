@@ -8,11 +8,11 @@ import java.util.concurrent.CompletionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.BackoffSupplier;
-import io.camunda.zeebe.client.api.worker.JobClient;
-import io.camunda.zeebe.client.api.worker.JobHandler;
-import io.camunda.zeebe.client.impl.worker.ExponentialBackoffBuilderImpl;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.BackoffSupplier;
+import io.camunda.client.api.worker.JobClient;
+import io.camunda.client.api.worker.JobHandler;
+import io.camunda.client.impl.worker.ExponentialBackoffBuilderImpl;
 import io.quarkiverse.camunda.BpmnError;
 import io.quarkiverse.camunda.JobWorkerExceptionHandler;
 import io.quarkiverse.camunda.runtime.metrics.MetricsRecorder;

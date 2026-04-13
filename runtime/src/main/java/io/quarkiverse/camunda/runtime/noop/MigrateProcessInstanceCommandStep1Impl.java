@@ -1,9 +1,9 @@
 package io.quarkiverse.camunda.runtime.noop;
 
-import io.camunda.zeebe.client.api.command.MigrateProcessInstanceCommandStep1;
-import io.camunda.zeebe.client.api.command.MigrationPlan;
-import io.camunda.zeebe.client.api.response.MigrateProcessInstanceResponse;
-import io.camunda.zeebe.client.impl.response.MigrateProcessInstanceResponseImpl;
+import io.camunda.client.api.command.MigrateProcessInstanceCommandStep1;
+import io.camunda.client.api.command.MigrationPlan;
+import io.camunda.client.api.response.MigrateProcessInstanceResponse;
+import io.camunda.client.impl.response.MigrateProcessInstanceResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class MigrateProcessInstanceCommandStep1Impl extends AbstractStep<MigrateProcessInstanceResponse>

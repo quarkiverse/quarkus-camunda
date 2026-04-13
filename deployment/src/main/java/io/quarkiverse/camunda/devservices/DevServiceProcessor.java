@@ -21,7 +21,7 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 import io.quarkiverse.camunda.DevServiceBuildTimeConfig;
 import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -47,7 +47,7 @@ public class DevServiceProcessor {
 
     private static final String DEFAULT_ZEEBE_CONTAINER_IMAGE = "camunda/zeebe";
 
-    private static final String DEFAULT_ZEEBE_VERSION = ZeebeClient.class.getPackage().getImplementationVersion();
+    private static final String DEFAULT_ZEEBE_VERSION = CamundaClient.class.getPackage().getImplementationVersion();
 
     private static final DockerImageName ZEEBE_IMAGE_NAME = DockerImageName.parse(DEFAULT_ZEEBE_CONTAINER_IMAGE)
             .withTag(DEFAULT_ZEEBE_VERSION);

@@ -1,7 +1,7 @@
 package io.quarkiverse.camunda.it.bpmn.errors;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobClient;
 import io.quarkiverse.camunda.BpmnError;
 import io.quarkiverse.camunda.JobWorker;
 

@@ -3,16 +3,16 @@ package io.quarkiverse.camunda.test;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.JsonMapper;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
-import io.camunda.zeebe.client.api.response.Topology;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.JsonMapper;
+import io.camunda.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.api.response.Topology;
 
 @ApplicationScoped
 public class TestService {
 
     @Inject
-    ZeebeClient client;
+    CamundaClient client;
 
     @Inject
     JsonMapper jsonMapper;

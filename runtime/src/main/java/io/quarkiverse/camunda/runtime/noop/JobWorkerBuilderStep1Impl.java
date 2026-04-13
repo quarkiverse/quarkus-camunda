@@ -3,7 +3,7 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.time.Duration;
 import java.util.List;
 
-import io.camunda.zeebe.client.api.worker.*;
+import io.camunda.client.api.worker.*;
 
 public class JobWorkerBuilderStep1Impl implements JobWorkerBuilderStep1, JobWorkerBuilderStep1.JobWorkerBuilderStep2,
         JobWorkerBuilderStep1.JobWorkerBuilderStep3 {

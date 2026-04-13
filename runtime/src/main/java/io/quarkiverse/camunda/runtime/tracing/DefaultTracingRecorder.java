@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
+import io.camunda.client.api.response.ActivatedJob;
 
 @ApplicationScoped
 public class DefaultTracingRecorder implements TracingRecorder {

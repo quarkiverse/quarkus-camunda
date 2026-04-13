@@ -1,7 +1,7 @@
 package io.quarkiverse.camunda.runtime.noop;
 
-import io.camunda.zeebe.client.api.command.UpdateRetriesJobCommandStep1;
-import io.camunda.zeebe.client.api.response.UpdateRetriesJobResponse;
+import io.camunda.client.api.command.UpdateRetriesJobCommandStep1;
+import io.camunda.client.api.response.UpdateRetriesJobResponse;
 
 public class UpdateRetriesJobCommandStep1Impl extends AbstractStep<UpdateRetriesJobResponse>
         implements UpdateRetriesJobCommandStep1, UpdateRetriesJobCommandStep1.UpdateRetriesJobCommandStep2 {

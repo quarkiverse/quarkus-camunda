@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import io.camunda.zeebe.client.api.command.DeployResourceCommandStep1;
-import io.camunda.zeebe.client.api.response.*;
-import io.camunda.zeebe.client.impl.response.DeploymentEventImpl;
+import io.camunda.client.api.command.DeployResourceCommandStep1;
+import io.camunda.client.api.response.*;
+import io.camunda.client.impl.response.DeploymentEventImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 import io.camunda.zeebe.model.bpmn.BpmnModelInstance;
 

@@ -4,9 +4,9 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.PublishMessageCommandStep1;
-import io.camunda.zeebe.client.api.response.PublishMessageResponse;
-import io.camunda.zeebe.client.impl.response.PublishMessageResponseImpl;
+import io.camunda.client.api.command.PublishMessageCommandStep1;
+import io.camunda.client.api.response.PublishMessageResponse;
+import io.camunda.client.impl.response.PublishMessageResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class PublishMessageCommandStep1Impl extends AbstractStep<PublishMessageResponse>

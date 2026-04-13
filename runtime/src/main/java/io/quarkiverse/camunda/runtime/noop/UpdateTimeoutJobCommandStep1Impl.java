@@ -2,8 +2,8 @@ package io.quarkiverse.camunda.runtime.noop;
 
 import java.time.Duration;
 
-import io.camunda.zeebe.client.api.command.UpdateTimeoutJobCommandStep1;
-import io.camunda.zeebe.client.api.response.UpdateTimeoutJobResponse;
+import io.camunda.client.api.command.UpdateTimeoutJobCommandStep1;
+import io.camunda.client.api.response.UpdateTimeoutJobResponse;
 
 public class UpdateTimeoutJobCommandStep1Impl extends AbstractStep<UpdateTimeoutJobResponse>
         implements UpdateTimeoutJobCommandStep1, UpdateTimeoutJobCommandStep1.UpdateTimeoutJobCommandStep2 {

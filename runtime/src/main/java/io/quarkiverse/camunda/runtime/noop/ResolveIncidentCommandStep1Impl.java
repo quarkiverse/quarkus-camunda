@@ -1,7 +1,7 @@
 package io.quarkiverse.camunda.runtime.noop;
 
-import io.camunda.zeebe.client.api.command.ResolveIncidentCommandStep1;
-import io.camunda.zeebe.client.api.response.ResolveIncidentResponse;
+import io.camunda.client.api.command.ResolveIncidentCommandStep1;
+import io.camunda.client.api.response.ResolveIncidentResponse;
 
 public class ResolveIncidentCommandStep1Impl extends AbstractStep<ResolveIncidentResponse>
         implements ResolveIncidentCommandStep1 {

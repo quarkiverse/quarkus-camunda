@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.CompleteJobCommandStep1;
-import io.camunda.zeebe.client.api.response.CompleteJobResponse;
-import io.camunda.zeebe.client.impl.response.CompleteJobResponseImpl;
+import io.camunda.client.api.command.CompleteJobCommandStep1;
+import io.camunda.client.api.response.CompleteJobResponse;
+import io.camunda.client.impl.response.CompleteJobResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class CompleteJobCommandStep1Impl extends AbstractStep<CompleteJobResponse> implements CompleteJobCommandStep1 {

@@ -8,8 +8,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
 
 @Path("person")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -20,7 +20,7 @@ public class PersonRestController {
     PersonRepository repository;
 
     @Inject
-    ZeebeClient client;
+    CamundaClient client;
 
     @POST
     public Response create(CreateRequestDTO dto) {

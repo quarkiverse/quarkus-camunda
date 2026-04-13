@@ -3,7 +3,7 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.ThrowErrorCommandStep1;
+import io.camunda.client.api.command.ThrowErrorCommandStep1;
 
 public class ThrowErrorCommandStep1Impl extends AbstractStep<Void>
         implements ThrowErrorCommandStep1, ThrowErrorCommandStep1.ThrowErrorCommandStep2 {

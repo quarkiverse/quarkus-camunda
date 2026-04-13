@@ -27,8 +27,8 @@ import org.jboss.jandex.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobClient;
 import io.quarkiverse.camunda.runtime.*;
 import io.quarkiverse.camunda.runtime.health.HealthCheck;
 import io.quarkiverse.camunda.runtime.health.TopologyHealthCheck;
@@ -269,26 +269,26 @@ public class Processor {
         resource.produce(new NativeImageResourceBuildItem("client-java.properties"));
 
         reflective.produce(ReflectiveClassBuildItem.builder(
-                "io.camunda.zeebe.client.impl.response.CreateProcessInstanceResponseImpl",
-                "io.camunda.zeebe.client.impl.response.ActivatedJobImpl",
-                "io.camunda.zeebe.client.impl.response.ActivateJobsResponseImpl",
-                "io.camunda.zeebe.client.impl.response.BrokerInfoImpl",
-                "io.camunda.zeebe.client.impl.response.CancelProcessInstanceResponseImpl",
-                "io.camunda.zeebe.client.impl.response.CompleteJobResponseImpl",
-                "io.camunda.zeebe.client.impl.response.CreateProcessInstanceResponseImpl",
-                "io.camunda.zeebe.client.impl.response.CreateProcessInstanceWithResultResponseImpl",
-                "io.camunda.zeebe.client.impl.response.DecisionImpl",
-                "io.camunda.zeebe.client.impl.response.DecisionRequirementsImpl",
-                "io.camunda.zeebe.client.impl.response.DeploymentEventImpl",
-                "io.camunda.zeebe.client.impl.response.FailJobResponseImpl",
-                "io.camunda.zeebe.client.impl.response.ModifyProcessInstanceResponseImpl",
-                "io.camunda.zeebe.client.impl.response.PartitionInfoImpl",
-                "io.camunda.zeebe.client.impl.response.ProcessImpl",
-                "io.camunda.zeebe.client.impl.response.PublishMessageResponseImpl",
-                "io.camunda.zeebe.client.impl.response.ResolveIncidentResponseImpl",
-                "io.camunda.zeebe.client.impl.response.SetVariablesResponseImpl",
-                "io.camunda.zeebe.client.impl.response.TopologyImpl",
-                "io.camunda.zeebe.client.impl.response.UpdateRetriesJobResponseImpl")
+                "io.camunda.client.impl.response.CreateProcessInstanceResponseImpl",
+                "io.camunda.client.impl.response.ActivatedJobImpl",
+                "io.camunda.client.impl.response.ActivateJobsResponseImpl",
+                "io.camunda.client.impl.response.BrokerInfoImpl",
+                "io.camunda.client.impl.response.CancelProcessInstanceResponseImpl",
+                "io.camunda.client.impl.response.CompleteJobResponseImpl",
+                "io.camunda.client.impl.response.CreateProcessInstanceResponseImpl",
+                "io.camunda.client.impl.response.CreateProcessInstanceWithResultResponseImpl",
+                "io.camunda.client.impl.response.DecisionImpl",
+                "io.camunda.client.impl.response.DecisionRequirementsImpl",
+                "io.camunda.client.impl.response.DeploymentEventImpl",
+                "io.camunda.client.impl.response.FailJobResponseImpl",
+                "io.camunda.client.impl.response.ModifyProcessInstanceResponseImpl",
+                "io.camunda.client.impl.response.PartitionInfoImpl",
+                "io.camunda.client.impl.response.ProcessImpl",
+                "io.camunda.client.impl.response.PublishMessageResponseImpl",
+                "io.camunda.client.impl.response.ResolveIncidentResponseImpl",
+                "io.camunda.client.impl.response.SetVariablesResponseImpl",
+                "io.camunda.client.impl.response.TopologyImpl",
+                "io.camunda.client.impl.response.UpdateRetriesJobResponseImpl")
                 .constructors(true)
                 .methods(true)
                 .fields(true)
@@ -343,10 +343,10 @@ public class Processor {
         NativeImageConfigBuildItem.Builder builder = NativeImageConfigBuildItem.builder();
         builder.addRuntimeInitializedClass("io.netty.handler.ssl.OpenSsl");
         builder.addRuntimeInitializedClass("io.netty.internal.tcnative.SSL");
-        builder.addRuntimeInitializedClass("io.camunda.zeebe.client.impl.worker.ExponentialBackoff");
-        builder.addRuntimeInitializedClass("io.camunda.zeebe.client.impl.worker.ExponentialBackoffBuilderImpl");
-        builder.addRuntimeInitializedClass("io.camunda.zeebe.client.impl.worker.JobWorkerImpl");
-        builder.addRuntimeInitializedClass("io.camunda.zeebe.client.impl.worker.JobWorkerBuilderImpl");
+        builder.addRuntimeInitializedClass("io.camunda.client.impl.worker.ExponentialBackoff");
+        builder.addRuntimeInitializedClass("io.camunda.client.impl.worker.ExponentialBackoffBuilderImpl");
+        builder.addRuntimeInitializedClass("io.camunda.client.impl.worker.JobWorkerImpl");
+        builder.addRuntimeInitializedClass("io.camunda.client.impl.worker.JobWorkerBuilderImpl");
         return builder.build();
     }
 

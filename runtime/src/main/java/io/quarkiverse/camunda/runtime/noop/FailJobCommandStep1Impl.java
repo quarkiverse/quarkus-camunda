@@ -4,9 +4,9 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.FailJobCommandStep1;
-import io.camunda.zeebe.client.api.response.FailJobResponse;
-import io.camunda.zeebe.client.impl.response.FailJobResponseImpl;
+import io.camunda.client.api.command.FailJobCommandStep1;
+import io.camunda.client.api.response.FailJobResponse;
+import io.camunda.client.impl.response.FailJobResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class FailJobCommandStep1Impl extends AbstractStep<FailJobResponse>
