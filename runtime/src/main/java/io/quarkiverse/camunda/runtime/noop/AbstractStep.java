@@ -12,7 +12,7 @@ import io.camunda.client.impl.response.ModifyProcessInstanceResponseImpl;
 import io.camunda.client.impl.response.TopologyImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
-public class AbstractStep<T> {
+public class AbstractStep<T> implements FinalCommandStep<T> {
 
     private static final Map<Class<?>, Object> DATA = new HashMap<>();
     static {

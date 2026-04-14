@@ -3,7 +3,13 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.time.Duration;
 import java.util.List;
 
-import io.camunda.client.api.worker.*;
+import io.camunda.client.api.command.enums.TenantFilter;
+import io.camunda.client.api.worker.BackoffSupplier;
+import io.camunda.client.api.worker.JobExceptionHandler;
+import io.camunda.client.api.worker.JobHandler;
+import io.camunda.client.api.worker.JobWorker;
+import io.camunda.client.api.worker.JobWorkerBuilderStep1;
+import io.camunda.client.api.worker.JobWorkerMetrics;
 
 public class JobWorkerBuilderStep1Impl implements JobWorkerBuilderStep1, JobWorkerBuilderStep1.JobWorkerBuilderStep2,
         JobWorkerBuilderStep1.JobWorkerBuilderStep3 {
@@ -63,6 +69,11 @@ public class JobWorkerBuilderStep1Impl implements JobWorkerBuilderStep1, JobWork
     }
 
     @Override
+    public JobWorkerBuilderStep3 streamNoJobsBackoffSupplier(BackoffSupplier streamNoJobsBackoffSupplier) {
+        return this;
+    }
+
+    @Override
     public JobWorkerBuilderStep3 streamEnabled(boolean isStreamEnabled) {
         return this;
     }
@@ -74,6 +85,16 @@ public class JobWorkerBuilderStep1Impl implements JobWorkerBuilderStep1, JobWork
 
     @Override
     public JobWorkerBuilderStep3 metrics(JobWorkerMetrics metrics) {
+        return this;
+    }
+
+    @Override
+    public JobWorkerBuilderStep3 jobExceptionHandler(JobExceptionHandler jobExceptionHandler) {
+        return this;
+    }
+
+    @Override
+    public JobWorkerBuilderStep3 tenantFilter(TenantFilter tenantFilter) {
         return this;
     }
 

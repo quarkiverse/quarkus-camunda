@@ -4,8 +4,9 @@ import java.io.InputStream;
 import java.util.Map;
 
 import io.camunda.client.api.command.ThrowErrorCommandStep1;
+import io.camunda.client.api.response.ThrowErrorResponse;
 
-public class ThrowErrorCommandStep1Impl extends AbstractStep<Void>
+public class ThrowErrorCommandStep1Impl extends AbstractStep<ThrowErrorResponse>
         implements ThrowErrorCommandStep1, ThrowErrorCommandStep1.ThrowErrorCommandStep2 {
 
     @Override
@@ -43,4 +44,13 @@ public class ThrowErrorCommandStep1Impl extends AbstractStep<Void>
         return this;
     }
 
+    @Override
+    public ThrowErrorCommandStep1 useRest() {
+        return this;
+    }
+
+    @Override
+    public ThrowErrorCommandStep1 useGrpc() {
+        return this;
+    }
 }
