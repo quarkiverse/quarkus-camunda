@@ -5,6 +5,13 @@ With version `>=2.0.0` we renamed the project from `quarkus zeebe` to `quarkus c
 
 All properties starting with `quarkus.zeebe` are now under `quarkus.camunda`.
 
+`quarkus.camunda.broker.gateway-address` needs to be a valid URL now. The new default is `http://localhost:26500` instead of `localhost:26500`.
+
+Quarkus Camunda uses by default REST. If you want to change this you need to set `quarkus.camunda.broker.use-grpc` to `true`.
+
+`quarkus.camunda.broker.plaintext` was removed as it is not supported by the camunda client anymore.
+
+
 ==== Version >=0.8.0
 In version `>=0.8.0` we replaced `@ZeebeWorker` with `@JobWorker` annotation.
 
