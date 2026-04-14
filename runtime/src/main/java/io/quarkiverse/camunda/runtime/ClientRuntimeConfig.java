@@ -117,15 +117,15 @@ public interface ClientRuntimeConfig {
          * Default: localhost:26500
          */
         @WithName("gateway-address")
-        @WithDefault("localhost:26500")
-        String gatewayAddress();
+        @WithDefault("`http://localhost:26500`")
+        URI gatewayAddress();
 
         /**
          * Camunda gateway rest address.
          * Default: localhost:8080
          */
         @WithName("rest-address")
-        @WithDefault("http://0.0.0.0:8080")
+        @WithDefault("http://localhost:8080")
         URI restAddress();
 
         /**
@@ -134,6 +134,13 @@ public interface ClientRuntimeConfig {
         @WithName("keep-alive")
         @WithDefault("PT45S")
         Duration keepAlive();
+
+        /**
+         * Use GRPC instead of REST for communication with camunda.
+         */
+        @WithName("use-grpc")
+        @WithDefault("false")
+        Boolean useGRPC();
     }
 
     /**
@@ -212,13 +219,6 @@ public interface ClientRuntimeConfig {
      * Camunda client security configuration.
      */
     interface SecurityConfig {
-
-        /**
-         * Client security plaintext flag.
-         */
-        @WithName("plaintext")
-        @WithDefault("true")
-        boolean plaintext();
 
         /**
          * Specify a path to a certificate with which to validate gateway requests.

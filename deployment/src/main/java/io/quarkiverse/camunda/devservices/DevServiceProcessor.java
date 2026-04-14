@@ -56,9 +56,10 @@ public class DevServiceProcessor {
     static final String PROP_ZEEBE_GATEWAY_ADDRESS = "quarkus.camunda.client.broker.gateway-address";
     static final String PROP_ZEEBE_REST_ADDRESS = "quarkus.camunda.client.broker.rest-address";
     private static final String DEV_SERVICE_LABEL = "quarkus-dev-service-camunda";
-    public static final int DEFAULT_ZEEBE_PORT = ZeebePort.GATEWAY.getPort();
-    public static final int DEFAULT_ZEEBE_REST_PORT = 8080;
-    private static final ContainerLocator zeebeContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL, DEFAULT_ZEEBE_PORT);
+    public static final int DEFAULT_ZEEBE_GRPC_PORT = ZeebePort.GATEWAY_GRPC.getPort();
+    public static final int DEFAULT_ZEEBE_REST_PORT = ZeebePort.GATEWAY_REST.getPort();
+    private static final ContainerLocator zeebeContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL,
+            DEFAULT_ZEEBE_GRPC_PORT);
     static volatile ZeebeRunningDevService devService;
     static volatile ZeebeDevServiceCfg cfg;
     static volatile boolean first = true;
@@ -205,8 +206,8 @@ public class DevServiceProcessor {
 
             String gateway = String.format("%s:%d", container.getZeebeHost(), container.getGrpcPort());
             String baseUrl = String.format("http://%s:%d", container.getZeebeHost(), container.getRestPort());
-            String zeebeInternalUrl = container.getInternalAddress(DEFAULT_ZEEBE_PORT);
-            String testClient = container.getExternalAddress(DEFAULT_ZEEBE_PORT);
+            String zeebeInternalUrl = container.getInternalAddress(DEFAULT_ZEEBE_GRPC_PORT);
+            String testClient = container.getExternalAddress(DEFAULT_ZEEBE_GRPC_PORT);
             String testClientRest = container.getExternalAddress(DEFAULT_ZEEBE_REST_PORT);
 
             return new ZeebeRunningDevService(FEATURE_NAME,
@@ -347,11 +348,11 @@ public class DevServiceProcessor {
             //noinspection resource
             withCopyToContainer(
                     MountableFile.forClasspathResource("debug-exporter.jar"), "/tmp/debug-exporter.jar")
-                    .withEnv("ZEEBE_BROKER_EXPORTERS_DEBUG_JARPATH", "/tmp/debug-exporter.jar")
+                    .withEnv("CAMUNDA_BROKER_EXPORTERS_DEBUG_JARPATH", "/tmp/debug-exporter.jar")
                     .withEnv(
-                            "ZEEBE_BROKER_EXPORTERS_DEBUG_CLASSNAME", "io.zeebe.containers.exporter.DebugExporter")
+                            "CAMUNDA_BROKER_EXPORTERS_DEBUG_CLASSNAME", "io.zeebe.containers.exporter.DebugExporter")
                     .withEnv(
-                            "ZEEBE_BROKER_EXPORTERS_DEBUG_ARGS_URL", receiver);
+                            "CAMUNDA_BROKER_EXPORTERS_DEBUG_ARGS_URL", receiver);
         }
 
         @Override
@@ -361,16 +362,16 @@ public class DevServiceProcessor {
             if (useSharedNetwork) {
                 hostName = ConfigureUtil.configureSharedNetwork(this, "zeebe");
                 addExposedPort(DEFAULT_ZEEBE_REST_PORT);
-                withEnv("ZEEBE_BROKER_NETWORK_ADVERTISEDHOST", hostName);
+                withEnv("CAMUNDA_BROKER_NETWORK_ADVERTISEDHOST", hostName);
                 return;
             } else {
                 withNetwork(Network.SHARED);
             }
 
             if (fixedExposedPort > 0) {
-                addFixedExposedPort(fixedExposedPort, DEFAULT_ZEEBE_PORT);
+                addFixedExposedPort(fixedExposedPort, DEFAULT_ZEEBE_GRPC_PORT);
             } else {
-                addExposedPort(DEFAULT_ZEEBE_PORT);
+                addExposedPort(DEFAULT_ZEEBE_GRPC_PORT);
             }
             if (fixedExposedRestPort > 0) {
                 addFixedExposedPort(fixedExposedRestPort, DEFAULT_ZEEBE_REST_PORT);
@@ -381,7 +382,7 @@ public class DevServiceProcessor {
 
         public int getGrpcPort() {
             if (useSharedNetwork) {
-                return DEFAULT_ZEEBE_PORT;
+                return DEFAULT_ZEEBE_GRPC_PORT;
             }
             if (fixedExposedPort > 0) {
                 return fixedExposedPort;

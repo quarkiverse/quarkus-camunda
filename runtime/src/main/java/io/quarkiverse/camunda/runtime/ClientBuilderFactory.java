@@ -1,5 +1,7 @@
 package io.quarkiverse.camunda.runtime;
 
+import java.net.URI;
+
 import io.camunda.client.CredentialsProvider;
 import io.camunda.client.api.JsonMapper;
 import io.camunda.client.impl.CamundaClientBuilderImpl;
@@ -10,7 +12,7 @@ public class ClientBuilderFactory {
     public static CamundaClientBuilderImpl createBuilder(ClientRuntimeConfig config, JsonMapper jsonMapper) {
         CamundaClientBuilderImpl builder = new CamundaClientBuilderImpl();
 
-        builder.gatewayAddress(createGatewayAddress(config))
+        builder.grpcAddress(createGatewayAddress(config))
                 .restAddress(config.broker().restAddress())
                 .defaultTenantId(config.tenant().defaultTenantId())
                 .defaultJobWorkerTenantIds(config.tenant().defaultJobWorkerTenantIds())
@@ -26,8 +28,8 @@ public class ClientBuilderFactory {
 
         config.security().overrideAuthority().ifPresent(builder::overrideAuthority);
         config.security().certPath().ifPresent(builder::caCertificatePath);
-        if (config.security().plaintext()) {
-            builder.usePlaintext();
+        if (config.broker().useGRPC()) {
+            builder.preferRestOverGrpc(false);
         }
         if (jsonMapper != null) {
             builder.withJsonMapper(jsonMapper);
@@ -35,13 +37,13 @@ public class ClientBuilderFactory {
         return builder;
     }
 
-    private static String createGatewayAddress(ClientRuntimeConfig config) {
+    private static URI createGatewayAddress(ClientRuntimeConfig config) {
         if (config.cloud().clusterId().isPresent()) {
-            return String.format("%s.%s.%s:%d",
+            return URI.create(String.format("%s.%s.%s:%d",
                     config.cloud().clusterId().get(),
                     config.cloud().region(),
                     config.cloud().baseUrl(),
-                    config.cloud().port());
+                    config.cloud().port()));
         }
         return config.broker().gatewayAddress();
     }
@@ -78,15 +80,7 @@ public class ClientBuilderFactory {
 
     private static String createOauthAudience(ClientRuntimeConfig config) {
         return config.oauth().tokenAudience().orElseGet(
-                () -> removePortFromAddress(config.broker().gatewayAddress()));
-    }
-
-    private static String removePortFromAddress(String address) {
-        int index = address.lastIndexOf(':');
-        if (index > 0) {
-            return address.substring(0, index);
-        }
-        return address;
+                () -> config.broker().gatewayAddress().getHost());
     }
 
 }
