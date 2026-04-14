@@ -85,7 +85,7 @@ public class JsonRPCService {
     }
 
     public Object userTaskAssign(long key, String assignee, String action, boolean allowOverride) {
-        getClient().newUserTaskAssignCommand(key)
+        getClient().newAssignUserTaskCommand(key)
                 .action(action)
                 .allowOverride(allowOverride)
                 .assignee(assignee).send().join();
@@ -93,13 +93,13 @@ public class JsonRPCService {
     }
 
     public Object userTaskUnassign(long key) {
-        getClient().newUserTaskUnassignCommand(key).send().join();
+        getClient().newUnassignUserTaskCommand(key).send().join();
         return Map.of("command", "userTaskUnassign", "userTaskKey", key);
     }
 
     public Object userTaskUpdate(long key, String action, List<String> candidateUsers, List<String> candidateGroups,
             String dueDate, String followUpDate) {
-        var tmp = getClient().newUserTaskUpdateCommand(key);
+        var tmp = getClient().newUpdateUserTaskCommand(key);
         if (action != null) {
             tmp = tmp.action(action);
         }

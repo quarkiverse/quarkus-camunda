@@ -28,6 +28,56 @@ public class ModifyProcessInstanceCommandStep1Impl extends AbstractStep<ModifyPr
     }
 
     @Override
+    public ModifyProcessInstanceCommandStep2 terminateElements(String elementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElements(String sourceElementId, String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElements(String sourceElementId, String targetElementId,
+            long ancestorElementInstanceKey) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementsWithInferredAncestor(String sourceElementId, String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementsWithSourceParentAsAncestor(String sourceElementId,
+            String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElement(long sourceElementInstanceKey, String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElement(long sourceElementInstanceKey, String targetElementId,
+            long ancestorElementInstanceKey) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementWithInferredAncestor(long sourceElementInstanceKey,
+            String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementWithSourceParentAsAncestor(long sourceElementInstanceKey,
+            String targetElementId) {
+        return this;
+    }
+
+    @Override
     public ModifyProcessInstanceCommandStep3 withVariables(InputStream variables) {
         return this;
     }
@@ -87,4 +137,18 @@ public class ModifyProcessInstanceCommandStep1Impl extends AbstractStep<ModifyPr
         return new ModifyProcessInstanceResponseImpl(GatewayOuterClass.ModifyProcessInstanceResponse.getDefaultInstance());
     }
 
+    @Override
+    public ModifyProcessInstanceCommandStep2 operationReference(long operationReference) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep1 useRest() {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep1 useGrpc() {
+        return this;
+    }
 }

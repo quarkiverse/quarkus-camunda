@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import io.camunda.client.api.command.ActivateJobsCommandStep1;
+import io.camunda.client.api.command.enums.TenantFilter;
 import io.camunda.client.api.response.ActivateJobsResponse;
 
 public class ActivateJobsCommandStep1Impl extends AbstractStep<ActivateJobsResponse>
@@ -56,8 +57,22 @@ public class ActivateJobsCommandStep1Impl extends AbstractStep<ActivateJobsRespo
     }
 
     @Override
+    public ActivateJobsCommandStep3 tenantFilter(TenantFilter tenantFilter) {
+        return this;
+    }
+
+    @Override
     protected ActivateJobsResponse create() {
         return List::of;
     }
 
+    @Override
+    public ActivateJobsCommandStep1 useRest() {
+        return this;
+    }
+
+    @Override
+    public ActivateJobsCommandStep1 useGrpc() {
+        return this;
+    }
 }

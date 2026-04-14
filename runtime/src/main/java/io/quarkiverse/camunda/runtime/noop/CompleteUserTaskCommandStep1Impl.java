@@ -1,5 +1,6 @@
 package io.quarkiverse.camunda.runtime.noop;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import io.camunda.client.api.command.CompleteUserTaskCommandStep1;
@@ -14,7 +15,27 @@ public class CompleteUserTaskCommandStep1Impl extends AbstractStep<CompleteUserT
     }
 
     @Override
+    public CompleteUserTaskCommandStep1 variables(String variables) {
+        return this;
+    }
+
+    @Override
+    public CompleteUserTaskCommandStep1 variables(Object variables) {
+        return this;
+    }
+
+    @Override
+    public CompleteUserTaskCommandStep1 variables(InputStream variables) {
+        return this;
+    }
+
+    @Override
     public CompleteUserTaskCommandStep1 variables(Map<String, Object> variables) {
+        return this;
+    }
+
+    @Override
+    public CompleteUserTaskCommandStep1 variable(String key, Object value) {
         return this;
     }
 

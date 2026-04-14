@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import io.camunda.client.api.command.StreamJobsCommandStep1;
+import io.camunda.client.api.command.enums.TenantFilter;
 import io.camunda.client.api.response.ActivatedJob;
 import io.camunda.client.api.response.StreamJobsResponse;
 import io.camunda.client.impl.response.StreamJobsResponseImpl;
@@ -54,6 +55,11 @@ public class StreamJobsCommandStep1Impl extends AbstractStep<StreamJobsResponse>
 
     @Override
     public StreamJobsCommandStep3 tenantIds(String... tenantIds) {
+        return this;
+    }
+
+    @Override
+    public StreamJobsCommandStep3 tenantFilter(TenantFilter tenantFilter) {
         return this;
     }
 
