@@ -43,11 +43,6 @@
         <version>${camunda.version}</version>
       </dependency>
       <dependency>
-        <groupId>io.zeebe</groupId>
-        <artifactId>zeebe-test-container</artifactId>
-        <version>${zeebe.testcontainers.version}</version>
-      </dependency>
-      <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>camunda-process-test-java</artifactId>
         <version>${camunda.version}</version>
