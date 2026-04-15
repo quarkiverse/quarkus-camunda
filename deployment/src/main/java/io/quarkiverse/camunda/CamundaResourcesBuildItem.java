@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import io.quarkus.builder.item.SimpleBuildItem;
 
-public final class ResourcesBuildItem extends SimpleBuildItem {
+public final class CamundaResourcesBuildItem extends SimpleBuildItem {
 
     final Collection<String> resources;
 
-    public ResourcesBuildItem(Collection<String> resources) {
+    public CamundaResourcesBuildItem(Collection<String> resources) {
         this.resources = resources;
     }
 

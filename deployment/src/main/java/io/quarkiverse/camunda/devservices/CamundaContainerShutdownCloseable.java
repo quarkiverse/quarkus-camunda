@@ -18,9 +18,9 @@ import org.testcontainers.utility.TestcontainersConfiguration;
  * @see <a href="https://www.testcontainers.org/features/reuse/">Reusable Containers</a>
  * @see <a href="https://www.testcontainers.org/features/configuration/">Testcontainers Configuration</a>.
  */
-public class ContainerShutdownCloseable implements Closeable {
+public class CamundaContainerShutdownCloseable implements Closeable {
 
-    private static final Logger LOG = Logger.getLogger(ContainerShutdownCloseable.class);
+    private static final Logger LOG = Logger.getLogger(CamundaContainerShutdownCloseable.class);
 
     private final GenericContainer<?> container;
 
@@ -30,7 +30,7 @@ public class ContainerShutdownCloseable implements Closeable {
      * @param container the container to be eventually closed
      * @param friendlyServiceName for logging purposes
      */
-    public ContainerShutdownCloseable(GenericContainer<?> container, String friendlyServiceName) {
+    public CamundaContainerShutdownCloseable(GenericContainer<?> container, String friendlyServiceName) {
         Objects.requireNonNull(container);
         Objects.requireNonNull(friendlyServiceName);
         this.container = container;

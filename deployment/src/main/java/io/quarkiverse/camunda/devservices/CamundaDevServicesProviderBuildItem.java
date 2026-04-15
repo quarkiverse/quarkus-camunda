@@ -2,11 +2,11 @@ package io.quarkiverse.camunda.devservices;
 
 import io.quarkus.builder.item.SimpleBuildItem;
 
-public final class DevServicesProviderBuildItem extends SimpleBuildItem {
+public final class CamundaDevServicesProviderBuildItem extends SimpleBuildItem {
 
     public String zeebeInternalUrl;
 
-    public DevServicesProviderBuildItem(String zeebeInternalUrl) {
+    public CamundaDevServicesProviderBuildItem(String zeebeInternalUrl) {
         this.zeebeInternalUrl = zeebeInternalUrl;
     }
 

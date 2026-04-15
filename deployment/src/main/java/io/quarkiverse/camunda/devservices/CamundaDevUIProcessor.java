@@ -2,7 +2,7 @@ package io.quarkiverse.camunda.devservices;
 
 import org.jboss.logging.Logger;
 
-import io.quarkiverse.camunda.DevServiceBuildTimeConfig;
+import io.quarkiverse.camunda.CamundaDevServiceBuildTimeConfig;
 import io.quarkiverse.camunda.runtime.devmode.JsonRPCService;
 import io.quarkiverse.camunda.runtime.devmode.RecordsHandler;
 import io.quarkus.deployment.IsDevelopment;
@@ -16,14 +16,14 @@ import io.quarkus.vertx.http.deployment.NonApplicationRootPathBuildItem;
 import io.quarkus.vertx.http.deployment.RouteBuildItem;
 import io.vertx.ext.web.handler.BodyHandler;
 
-public class DevUIProcessor {
+public class CamundaDevUIProcessor {
 
-    private static final Logger log = Logger.getLogger(DevUIProcessor.class);
+    private static final Logger log = Logger.getLogger(CamundaDevUIProcessor.class);
     private static final String ROOT_PATH = "zeebe";
     private static final String SUB_PATH_RECORDS = "records";
 
     @BuildStep(onlyIf = IsDevelopment.class)
-    public void pages(DevServiceBuildTimeConfig buildTimeConfig,
+    public void pages(CamundaDevServiceBuildTimeConfig buildTimeConfig,
             BuildProducer<RouteBuildItem> routes,
             BuildProducer<CardPageBuildItem> cardsProducer,
             NonApplicationRootPathBuildItem nonApplicationRootPathBuildItem,

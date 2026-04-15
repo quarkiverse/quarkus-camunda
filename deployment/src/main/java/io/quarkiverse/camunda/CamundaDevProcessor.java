@@ -16,20 +16,20 @@ import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.HotDeploymentWatchedFileBuildItem;
 
-public class DevProcessor {
+public class CamundaDevProcessor {
 
-    private static final Logger log = Logger.getLogger(DevProcessor.class);
+    private static final Logger log = Logger.getLogger(CamundaDevProcessor.class);
 
     @BuildStep(onlyIf = IsDevelopment.class)
-    void hotReload(DevServiceBuildTimeConfig buildTimeConfig, BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+    void hotReload(CamundaDevServiceBuildTimeConfig buildTimeConfig, BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
         if (buildTimeConfig.devMode().watchJobWorker()) {
             additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(JobWorkerReplacementInterceptor.class));
         }
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)
-    void watchChanges(BuildTimeConfig config, ResourcesBuildItem resources,
-            DevServiceBuildTimeConfig buildTimeConfig,
+    void watchChanges(BuildTimeConfig config, CamundaResourcesBuildItem resources,
+            CamundaDevServiceBuildTimeConfig buildTimeConfig,
             BuildProducer<HotDeploymentWatchedFileBuildItem> watchedPaths) {
 
         if (!config.resources().enabled()) {

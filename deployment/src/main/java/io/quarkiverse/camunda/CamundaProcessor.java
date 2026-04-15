@@ -1,6 +1,6 @@
 package io.quarkiverse.camunda;
 
-import static io.quarkiverse.camunda.DotNames.*;
+import static io.quarkiverse.camunda.CamundaDotNames.*;
 import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
 import static org.jboss.jandex.AnnotationTarget.Kind.METHOD;
 
@@ -59,11 +59,11 @@ import io.quarkus.runtime.metrics.MetricsFactory;
 import io.quarkus.runtime.util.HashUtil;
 import io.quarkus.smallrye.health.deployment.spi.HealthBuildItem;
 
-public class Processor {
+public class CamundaProcessor {
 
     public static final String FEATURE_NAME = "camunda";
 
-    private static final Logger log = LoggerFactory.getLogger(Processor.class);
+    private static final Logger log = LoggerFactory.getLogger(CamundaProcessor.class);
 
     private static final String JAR_RESOURCE_PROTOCOL = "jar";
     private static final String FILE_RESOURCE_PROTOCOL = "file";
@@ -117,7 +117,7 @@ public class Processor {
     @BuildStep
     AutoAddScopeBuildItem autoAddScopeToJobWorkerClass() {
         return AutoAddScopeBuildItem.builder()
-                .anyMethodMatches(m -> !Modifier.isStatic(m.flags()) && m.hasAnnotation(DotNames.JOB_WORKER))
+                .anyMethodMatches(m -> !Modifier.isStatic(m.flags()) && m.hasAnnotation(CamundaDotNames.JOB_WORKER))
                 .defaultScope(BuiltinScope.SINGLETON)
                 .reason("Found non-static job worker execution methods").build();
     }
@@ -126,20 +126,20 @@ public class Processor {
     void collectJobWorkerMethods(BeanArchiveIndexBuildItem beanArchives, CombinedIndexBuildItem indexBuildItem,
             BeanDiscoveryFinishedBuildItem beanDiscovery,
             TransformedAnnotationsBuildItem transformedAnnotations,
-            BuildProducer<JobWorkerMethodItem> jobWorkerMethods) {
+            BuildProducer<CamundaJobWorkerMethodItem> jobWorkerMethods) {
 
         IndexView index = beanArchives.getIndex();
 
         // First collect static job worker methods
-        List<AnnotationInstance> workers = new ArrayList<>(beanArchives.getIndex().getAnnotations(DotNames.JOB_WORKER));
+        List<AnnotationInstance> workers = new ArrayList<>(beanArchives.getIndex().getAnnotations(CamundaDotNames.JOB_WORKER));
         for (AnnotationInstance annotationInstance : workers) {
             if (annotationInstance.target().kind() != METHOD) {
                 continue;
             }
             MethodInfo method = annotationInstance.target().asMethod();
             if (Modifier.isStatic(method.flags())) {
-                jobWorkerMethods.produce(new JobWorkerMethodItem(null, method, createValue(index, annotationInstance),
-                        transformedAnnotations.getAnnotation(method, DotNames.NON_BLOCKING) != null));
+                jobWorkerMethods.produce(new CamundaJobWorkerMethodItem(null, method, createValue(index, annotationInstance),
+                        transformedAnnotations.getAnnotation(method, CamundaDotNames.NON_BLOCKING) != null));
                 log.debug("Found job worker static method {} declared on {}", method, method.declaringClass().name());
             }
         }
@@ -151,28 +151,29 @@ public class Processor {
     }
 
     private void collectJobWorkerMethods(IndexView index, TransformedAnnotationsBuildItem transformedAnnotations, BeanInfo bean,
-            ClassInfo beanClass, BuildProducer<JobWorkerMethodItem> jobWorkOrdersMethods) {
+            ClassInfo beanClass, BuildProducer<CamundaJobWorkerMethodItem> jobWorkOrdersMethods) {
 
         for (MethodInfo method : beanClass.methods()) {
             if (Modifier.isStatic(method.flags())) {
                 // Ignore static methods
                 continue;
             }
-            AnnotationInstance jobWorkerAnnotation = transformedAnnotations.getAnnotation(method, DotNames.JOB_WORKER);
+            AnnotationInstance jobWorkerAnnotation = transformedAnnotations.getAnnotation(method, CamundaDotNames.JOB_WORKER);
             if (jobWorkerAnnotation != null) {
-                jobWorkOrdersMethods.produce(new JobWorkerMethodItem(bean, method, createValue(index, jobWorkerAnnotation),
-                        transformedAnnotations.getAnnotation(method, DotNames.NON_BLOCKING) != null));
+                jobWorkOrdersMethods
+                        .produce(new CamundaJobWorkerMethodItem(bean, method, createValue(index, jobWorkerAnnotation),
+                                transformedAnnotations.getAnnotation(method, CamundaDotNames.NON_BLOCKING) != null));
                 log.debug("Found job worker business method {} declared on {}", method, bean);
             }
         }
     }
 
     @BuildStep
-    void validateScheduledBusinessMethods(List<JobWorkerMethodItem> workerMethods,
+    void validateScheduledBusinessMethods(List<CamundaJobWorkerMethodItem> workerMethods,
             BuildProducer<ValidationPhaseBuildItem.ValidationErrorBuildItem> validationErrors) {
         List<Throwable> errors = new ArrayList<>();
 
-        for (JobWorkerMethodItem scheduledMethod : workerMethods) {
+        for (CamundaJobWorkerMethodItem scheduledMethod : workerMethods) {
             MethodInfo method = scheduledMethod.getMethod();
             if (Modifier.isAbstract(method.flags())) {
                 errors.add(new IllegalStateException("@JobWorker method must not be abstract: "
@@ -194,14 +195,14 @@ public class Processor {
     public List<UnremovableBeanBuildItem> unRemovableBeans() {
         // Beans annotated with @JobWorker should never be removed
         return List.of(new UnremovableBeanBuildItem(
-                new UnremovableBeanBuildItem.BeanClassAnnotationExclusion(DotNames.JOB_WORKER)));
+                new UnremovableBeanBuildItem.BeanClassAnnotationExclusion(CamundaDotNames.JOB_WORKER)));
     }
 
     @BuildStep
     @Record(RUNTIME_INIT)
     public FeatureBuildItem buildJobWorkerInvokers(Recorder recorder,
-            BuildProducer<WorkersBuildItem> zeebeWorkers,
-            List<JobWorkerMethodItem> workerMethods,
+            BuildProducer<CamundaWorkersBuildItem> zeebeWorkers,
+            List<CamundaJobWorkerMethodItem> workerMethods,
             BuildProducer<GeneratedClassBuildItem> generatedClasses,
             BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
 
@@ -229,7 +230,7 @@ public class Processor {
                         .build());
 
         List<JobWorkerMetadata> metadata = new ArrayList<>();
-        for (JobWorkerMethodItem workerMethod : workerMethods) {
+        for (CamundaJobWorkerMethodItem workerMethod : workerMethods) {
 
             JobWorkerMetadata meta = new JobWorkerMetadata();
             meta.invokerClass = generateInvoker(workerMethod, classOutput);
@@ -247,7 +248,7 @@ public class Processor {
                             .build());
         }
 
-        zeebeWorkers.produce(new WorkersBuildItem(metadata));
+        zeebeWorkers.produce(new CamundaWorkersBuildItem(metadata));
 
         return new FeatureBuildItem(FEATURE_NAME);
     }
@@ -260,7 +261,7 @@ public class Processor {
             BuildProducer<AdditionalBeanBuildItem> additionalBeans,
             BuildProducer<NativeImageResourceBuildItem> resource,
             BuildProducer<ExtensionSslNativeSupportBuildItem> ssl,
-            BuildProducer<ResourcesBuildItem> resourcesBuildItem) throws Exception {
+            BuildProducer<CamundaResourcesBuildItem> resourcesBuildItem) throws Exception {
 
         additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(ClientService.class));
         additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(ResourcesProducer.class));
@@ -298,7 +299,7 @@ public class Processor {
         if (!resources.isEmpty()) {
             resource.produce(new NativeImageResourceBuildItem(resources.toArray(new String[0])));
         }
-        resourcesBuildItem.produce(new ResourcesBuildItem(resources));
+        resourcesBuildItem.produce(new CamundaResourcesBuildItem(resources));
 
         ssl.produce(new ExtensionSslNativeSupportBuildItem(FEATURE_NAME));
     }
@@ -312,7 +313,7 @@ public class Processor {
     @BuildStep
     @Record(RUNTIME_INIT)
     @Consume(SyntheticBeansRuntimeInitBuildItem.class)
-    void runtimeInitConfiguration(Recorder recorder, WorkersBuildItem workers, ResourcesBuildItem resources) {
+    void runtimeInitConfiguration(Recorder recorder, CamundaWorkersBuildItem workers, CamundaResourcesBuildItem resources) {
         recorder.init(resources.getResources(), workers.getWorkers());
     }
 
@@ -414,7 +415,7 @@ public class Processor {
         return FileSystems.newFileSystem(uri, env);
     }
 
-    private String generateInvoker(JobWorkerMethodItem workerMethod, ClassOutput classOutput) {
+    private String generateInvoker(CamundaJobWorkerMethodItem workerMethod, ClassOutput classOutput) {
 
         BeanInfo bean = workerMethod.getBean();
         MethodInfo method = workerMethod.getMethod();
@@ -511,9 +512,9 @@ public class Processor {
                     tryBlock.loadNull());
         } else if (method.returnType().name().equals(COMPLETION_STAGE)) {
             // return directly completion stage
-        } else if (method.returnType().name().equals(DotNames.UNI)) {
+        } else if (method.returnType().name().equals(CamundaDotNames.UNI)) {
             // Subscribe to the returned Uni
-            res = tryBlock.invokeInterfaceMethod(MethodDescriptor.ofMethod(DotNames.UNI.toString(),
+            res = tryBlock.invokeInterfaceMethod(MethodDescriptor.ofMethod(CamundaDotNames.UNI.toString(),
                     "subscribeAsCompletionStage", CompletableFuture.class), res);
         } else {
             res = tryBlock.invokeStaticMethod(
@@ -544,7 +545,7 @@ public class Processor {
     }
 
     private Parameters createParameters(MethodInfo method, MethodCreator invoke, TryBlock tryBlock,
-            JobWorkerMethodItem workerMethod) {
+            CamundaJobWorkerMethodItem workerMethod) {
         int size = method.parameterTypes().size();
 
         String[] params = new String[size];

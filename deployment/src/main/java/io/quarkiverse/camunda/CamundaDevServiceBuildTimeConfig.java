@@ -1,6 +1,6 @@
 package io.quarkiverse.camunda;
 
-import io.quarkiverse.camunda.devservices.DevServicesConfig;
+import io.quarkiverse.camunda.devservices.CamundaDevServicesConfig;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
@@ -9,21 +9,21 @@ import io.smallrye.config.WithName;
 
 @ConfigRoot(phase = ConfigPhase.BUILD_TIME)
 @ConfigMapping(prefix = "quarkus.camunda")
-public interface DevServiceBuildTimeConfig {
+public interface CamundaDevServiceBuildTimeConfig {
 
     /**
      * Default Dev services configuration.
      */
     @WithName("devservices")
-    DevServicesConfig devService();
+    CamundaDevServicesConfig devService();
 
     /**
      * Dev mode configuration.
      */
     @WithName("dev-mode")
-    DevMode devMode();
+    CamundaDevMode devMode();
 
-    interface DevMode {
+    interface CamundaDevMode {
 
         /**
          * Disable or enabled zeebe dashboard dev-ui.

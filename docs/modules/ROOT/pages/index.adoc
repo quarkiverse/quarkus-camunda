@@ -59,7 +59,7 @@ quarkus.camunda.dev-mode.watch-job-worker=true
 
 [source,properties]
 ----
-quarkus.camunda.client.broker.gateway-address=localhost:26500
+quarkus.camunda.client.broker.gateway-address=http://localhost:26500
 # If you are sure that there is already an instance running, yu can directly deactivate it
 quarkus.camunda.devservices.enabled=false
 quarkus.camunda.devservices.shared=true

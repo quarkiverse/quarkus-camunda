@@ -1,13 +1,11 @@
 package io.quarkiverse.camunda.devservices;
 
 import java.util.Optional;
-import java.util.OptionalInt;
 
-import io.quarkus.runtime.annotations.ConfigGroup;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
-public interface DevServicesConfig {
+public interface CamundaDevServicesConfig {
 
     /**
      * If DevServices has been explicitly enabled or disabled. DevServices is generally enabled
@@ -19,22 +17,6 @@ public interface DevServicesConfig {
     @WithName("enabled")
     @WithDefault("true")
     boolean enabled();
-
-    /**
-     * Optional fixed port the dev service will listen to.
-     * <p>
-     * If not defined, the port will be chosen randomly.
-     */
-    @WithName("port")
-    OptionalInt port();
-
-    /**
-     * Optional fixed port the dev service rest service will listen to.
-     * <p>
-     * If not defined, the port will be chosen randomly.
-     */
-    @WithName("rest-port")
-    OptionalInt restPort();
 
     /**
      * Indicates if the Zeebe server managed by Quarkus Dev Services is shared.
@@ -84,53 +66,5 @@ public interface DevServicesConfig {
     @WithName("reuse")
     @WithDefault("false")
     boolean reuse();
-
-    /**
-     * Optional fixed debug export receiver port the dev service will listen to.
-     * <p>
-     * If not defined, the port will be chosen randomly.
-     */
-    @WithName("test")
-    TestConfig test();
-
-    /**
-     * Debug dev mode exporter optional configuration.
-     */
-    @WithName("dev-exporter")
-    DevExporterConfig devExporter();
-
-    /**
-     * Zeebe test configuration.
-     */
-    @ConfigGroup
-    interface TestConfig {
-        /**
-         * Optional fixed debug export receiver port the dev service will listen to.
-         * <p>
-         * If not defined, the port will be chosen randomly.
-         */
-        @WithName("receiver-port")
-        OptionalInt receiverPort();
-
-        /**
-         * Disable or enable debug exporter for the test.
-         */
-        @WithName("exporter")
-        @WithDefault("true")
-        boolean exporter();
-    }
-
-    /**
-     * Zeebe dev mode debug exporter configuration.
-     */
-    interface DevExporterConfig {
-        /**
-         * Enable or disable debug exporter.
-         */
-        @WithName("enabled")
-        @WithDefault("true")
-        boolean enabled();
-
-    }
 
 }

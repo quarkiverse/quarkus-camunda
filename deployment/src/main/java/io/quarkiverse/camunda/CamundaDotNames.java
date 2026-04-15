@@ -9,7 +9,7 @@ import io.camunda.client.api.response.ActivatedJob;
 import io.camunda.client.api.worker.JobClient;
 import io.smallrye.common.annotation.NonBlocking;
 
-public class DotNames {
+public class CamundaDotNames {
 
     static final DotName JOB_WORKER = DotName.createSimple(JobWorker.class.getName());
 
