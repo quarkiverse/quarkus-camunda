@@ -45,12 +45,12 @@ import io.zeebe.containers.util.HostPortForwarder;
 
 public class DevServiceProcessor {
 
-    private static final String DEFAULT_ZEEBE_CONTAINER_IMAGE = "camunda/zeebe";
+    private static final String DEFAULT_CAMUNDA_CONTAINER_IMAGE = "camunda/camunda";
 
-    private static final String DEFAULT_ZEEBE_VERSION = CamundaClient.class.getPackage().getImplementationVersion();
+    private static final String DEFAULT_CAMUNDA_VERSION = CamundaClient.class.getPackage().getImplementationVersion();
 
-    private static final DockerImageName ZEEBE_IMAGE_NAME = DockerImageName.parse(DEFAULT_ZEEBE_CONTAINER_IMAGE)
-            .withTag(DEFAULT_ZEEBE_VERSION);
+    private static final DockerImageName CAMUNDA_IMAGE_NAME = DockerImageName.parse(DEFAULT_CAMUNDA_CONTAINER_IMAGE)
+            .withTag(DEFAULT_CAMUNDA_VERSION);
 
     private static final Logger log = Logger.getLogger(DevServiceProcessor.class);
     static final String PROP_ZEEBE_GATEWAY_ADDRESS = "quarkus.camunda.client.broker.gateway-address";
@@ -169,7 +169,7 @@ public class DevServiceProcessor {
         // Starting the broker
         final Supplier<ZeebeRunningDevService> defaultZeebeBrokerSupplier = () -> {
 
-            DockerImageName image = ZEEBE_IMAGE_NAME;
+            DockerImageName image = CAMUNDA_IMAGE_NAME;
             if (config.imageName != null) {
                 image = DockerImageName.parse(config.imageName);
             }
@@ -185,7 +185,7 @@ public class DevServiceProcessor {
                 }
             }
 
-            QuarkusZeebeContainer container = new QuarkusZeebeContainer(
+            QuarkusCamundaContainer container = new QuarkusCamundaContainer(
                     image,
                     config.fixedExposedPort,
                     launchMode.getLaunchMode() == DEVELOPMENT ? config.serviceName : null,
@@ -309,99 +309,6 @@ public class DevServiceProcessor {
         @Override
         public int hashCode() {
             return Objects.hash(devServicesEnabled, imageName, fixedExposedPort);
-        }
-    }
-
-    private static class QuarkusZeebeContainer extends ZeebeContainer {
-
-        private final int fixedExposedPort;
-        private final int fixedExposedRestPort;
-        private final boolean useSharedNetwork;
-
-        private String hostName = null;
-
-        public QuarkusZeebeContainer(DockerImageName image, int fixedExposedPort, String serviceName,
-                boolean useSharedNetwork, boolean test, int testDebugExportPort, boolean devDebugExporter,
-                int debugExporterPort, int fixedExposedRestPort) {
-            super(image);
-            log.debugf("Zeebe broker docker image %s", image);
-            this.fixedExposedPort = fixedExposedPort;
-            this.fixedExposedRestPort = fixedExposedRestPort;
-            this.useSharedNetwork = useSharedNetwork;
-
-            if (serviceName != null) {
-                withLabel(DEV_SERVICE_LABEL, serviceName);
-            }
-            if (test) {
-                // create random port
-                withDebugExporter(testDebugExportPort);
-            } else {
-                if (devDebugExporter) {
-                    debugExporter(debugExporterPort);
-                }
-            }
-        }
-
-        public void debugExporter(final int port) {
-            final int containerPort = HostPortForwarder.forwardHostPort(port, 5);
-            var receiver = "http://host.testcontainers.internal:" + containerPort + "/q/zeebe/records";
-            //noinspection resource
-            withCopyToContainer(
-                    MountableFile.forClasspathResource("debug-exporter.jar"), "/tmp/debug-exporter.jar")
-                    .withEnv("CAMUNDA_BROKER_EXPORTERS_DEBUG_JARPATH", "/tmp/debug-exporter.jar")
-                    .withEnv(
-                            "CAMUNDA_BROKER_EXPORTERS_DEBUG_CLASSNAME", "io.zeebe.containers.exporter.DebugExporter")
-                    .withEnv(
-                            "CAMUNDA_BROKER_EXPORTERS_DEBUG_ARGS_URL", receiver);
-        }
-
-        @Override
-        protected void configure() {
-            super.configure();
-
-            if (useSharedNetwork) {
-                hostName = ConfigureUtil.configureSharedNetwork(this, "zeebe");
-                addExposedPort(DEFAULT_ZEEBE_REST_PORT);
-                withEnv("CAMUNDA_BROKER_NETWORK_ADVERTISEDHOST", hostName);
-                return;
-            } else {
-                withNetwork(Network.SHARED);
-            }
-
-            if (fixedExposedPort > 0) {
-                addFixedExposedPort(fixedExposedPort, DEFAULT_ZEEBE_GRPC_PORT);
-            } else {
-                addExposedPort(DEFAULT_ZEEBE_GRPC_PORT);
-            }
-            if (fixedExposedRestPort > 0) {
-                addFixedExposedPort(fixedExposedRestPort, DEFAULT_ZEEBE_REST_PORT);
-            } else {
-                addExposedPort(DEFAULT_ZEEBE_REST_PORT);
-            }
-        }
-
-        public int getGrpcPort() {
-            if (useSharedNetwork) {
-                return DEFAULT_ZEEBE_GRPC_PORT;
-            }
-            if (fixedExposedPort > 0) {
-                return fixedExposedPort;
-            }
-            return super.getFirstMappedPort();
-        }
-
-        public int getRestPort() {
-            if (useSharedNetwork) {
-                return DEFAULT_ZEEBE_REST_PORT;
-            }
-            if (fixedExposedPort > 0) {
-                return fixedExposedRestPort;
-            }
-            return super.getFirstMappedPort();
-        }
-
-        public String getZeebeHost() {
-            return useSharedNetwork ? hostName : super.getHost();
         }
     }
 
