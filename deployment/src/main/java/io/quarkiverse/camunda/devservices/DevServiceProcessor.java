@@ -6,6 +6,7 @@ import static io.quarkus.runtime.LaunchMode.DEVELOPMENT;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URI;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +18,10 @@ import java.util.function.Supplier;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.jboss.logging.Logger;
-import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
-import org.testcontainers.utility.MountableFile;
 
 import io.camunda.client.CamundaClient;
+import io.camunda.process.test.impl.runtime.ContainerRuntimePorts;
 import io.quarkiverse.camunda.DevServiceBuildTimeConfig;
 import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -35,13 +35,9 @@ import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.console.ConsoleInstalledBuildItem;
 import io.quarkus.deployment.console.StartupLogCompressor;
 import io.quarkus.deployment.logging.LoggingSetupBuildItem;
-import io.quarkus.devservices.common.ConfigureUtil;
 import io.quarkus.devservices.common.ContainerAddress;
 import io.quarkus.devservices.common.ContainerLocator;
 import io.quarkus.runtime.configuration.ConfigUtils;
-import io.zeebe.containers.ZeebeContainer;
-import io.zeebe.containers.ZeebePort;
-import io.zeebe.containers.util.HostPortForwarder;
 
 public class DevServiceProcessor {
 
@@ -56,12 +52,12 @@ public class DevServiceProcessor {
     static final String PROP_ZEEBE_GATEWAY_ADDRESS = "quarkus.camunda.client.broker.gateway-address";
     static final String PROP_ZEEBE_REST_ADDRESS = "quarkus.camunda.client.broker.rest-address";
     private static final String DEV_SERVICE_LABEL = "quarkus-dev-service-camunda";
-    public static final int DEFAULT_ZEEBE_GRPC_PORT = ZeebePort.GATEWAY_GRPC.getPort();
-    public static final int DEFAULT_ZEEBE_REST_PORT = ZeebePort.GATEWAY_REST.getPort();
+    public static final int DEFAULT_ZEEBE_GRPC_PORT = ContainerRuntimePorts.CAMUNDA_GATEWAY_API;
+    public static final int DEFAULT_ZEEBE_REST_PORT = ContainerRuntimePorts.CAMUNDA_REST_API;
     private static final ContainerLocator zeebeContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL,
             DEFAULT_ZEEBE_GRPC_PORT);
     static volatile ZeebeRunningDevService devService;
-    static volatile ZeebeDevServiceCfg cfg;
+    static volatile ZeebeDevServiceCfg runningConfiguration;
     static volatile boolean first = true;
 
     @BuildStep(onlyIfNot = IsProduction.class, onlyIf = {
@@ -79,20 +75,22 @@ public class DevServiceProcessor {
         ZeebeDevServiceCfg configuration = getConfiguration(buildTimeConfig);
 
         if (devService != null) {
-            boolean shouldShutdownTheBroker = !configuration.equals(cfg);
+            boolean shouldShutdownTheBroker = !configuration.equals(runningConfiguration);
             if (!shouldShutdownTheBroker) {
                 return devService.toBuildItem();
             }
-            stopZeebe();
-            cfg = null;
+            shutdownCamunda();
+            runningConfiguration = null;
         }
 
         StartupLogCompressor compressor = new StartupLogCompressor(
-                (launchMode.isTest() ? "(test) " : "") + "Zeebe Dev Services Starting:",
+                (launchMode.isTest() ? "(test) " : "") + "Camunda Dev Services Starting:",
                 consoleInstalledBuildItem, loggingSetupBuildItem);
         try {
+            boolean useSharedNetwork = DevServicesSharedNetworkBuildItem.isSharedNetworkRequired(devServicesConfig,
+                    devServicesSharedNetworkBuildItem);
             devService = startZeebe(dockerStatusBuildItem, configuration, launchMode,
-                    !devServicesSharedNetworkBuildItem.isEmpty(),
+                    useSharedNetwork,
                     devServicesConfig.timeout());
             if (devService == null) {
                 compressor.closeAndDumpCaptured();
@@ -113,15 +111,15 @@ public class DevServiceProcessor {
             first = false;
             Runnable closeTask = () -> {
                 if (devService != null) {
-                    stopZeebe();
+                    shutdownCamunda();
                 }
                 first = true;
                 devService = null;
-                cfg = null;
+                runningConfiguration = null;
             };
             closeBuildItem.addCloseTask(closeTask, true);
         }
-        cfg = configuration;
+        runningConfiguration = configuration;
 
         if (devService.isOwner()) {
             String tmp = devService.getConfig().get(PROP_ZEEBE_GATEWAY_ADDRESS);
@@ -134,8 +132,7 @@ public class DevServiceProcessor {
 
     public static class ZeebeRunningDevService extends RunningDevService {
 
-        public ZeebeRunningDevService(String name, String containerId, Closeable closeable, Map<String, String> config,
-                String zeebeInternalUrl) {
+        public ZeebeRunningDevService(String name, String containerId, Closeable closeable, Map<String, String> config) {
             super(name, containerId, closeable, config);
         }
     }
@@ -204,48 +201,42 @@ public class DevServiceProcessor {
 
             container.start();
 
-            String gateway = String.format("%s:%d", container.getZeebeHost(), container.getGrpcPort());
-            String baseUrl = String.format("http://%s:%d", container.getZeebeHost(), container.getRestPort());
-            String zeebeInternalUrl = container.getInternalAddress(DEFAULT_ZEEBE_GRPC_PORT);
-            String testClient = container.getExternalAddress(DEFAULT_ZEEBE_GRPC_PORT);
-            String testClientRest = container.getExternalAddress(DEFAULT_ZEEBE_REST_PORT);
+            URI grpcApiUri = container.getGrpcApiAddress();
+            URI restApiUri = container.getRestApiAddress();
 
             return new ZeebeRunningDevService(FEATURE_NAME,
                     container.getContainerId(),
                     new ContainerShutdownCloseable(container, FEATURE_NAME),
-                    configMap(gateway, baseUrl, launchMode.isTest(), testClient, testClientRest, testDebugExportPort,
-                            config.testExporter),
-                    zeebeInternalUrl);
+                    configMap(grpcApiUri, restApiUri, launchMode.isTest(), testDebugExportPort,
+                            config.testExporter));
         };
 
         return maybeContainerAddress
                 .map(containerAddress -> new ZeebeRunningDevService(FEATURE_NAME,
                         containerAddress.getId(),
-                        null, configMap(containerAddress.getUrl(), containerAddress.getUrl(), false, null, null, null, false),
-                        null))
+                        null, configMap(URI.create(containerAddress.getUrl()), URI.create(containerAddress.getUrl()), false, null, false)))
                 .orElseGet(defaultZeebeBrokerSupplier);
     }
 
-    private static Map<String, String> configMap(String gateway, String baseUrl, boolean test, String testClient,
-            String testClientRest,
+    private static Map<String, String> configMap(URI grpcApiUri, URI restApiUri, boolean test,
             Integer testDebugExportPort,
             boolean testExporter) {
         Map<String, String> config = new HashMap<>();
-        config.put(PROP_ZEEBE_GATEWAY_ADDRESS, gateway);
-        config.put(PROP_ZEEBE_REST_ADDRESS, baseUrl);
+        config.put(PROP_ZEEBE_GATEWAY_ADDRESS, grpcApiUri.toString());
+        config.put(PROP_ZEEBE_REST_ADDRESS, restApiUri.toString());
         if (test && testExporter) {
             if (testDebugExportPort != null) {
                 config.put("quarkiverse.zeebe.devservices.test.receiver-port", "" + testDebugExportPort);
             }
-            if (testClient != null) {
-                config.put("quarkiverse.zeebe.devservices.test.gateway-address", testClient);
-                config.put("quarkiverse.zeebe.devservices.test.rest-address", testClientRest);
-            }
+//            if (testClient != null) {
+//                config.put("quarkiverse.zeebe.devservices.test.gateway-address", testClient.toString());
+//                config.put("quarkiverse.zeebe.devservices.test.rest-address", testClientRest.toString());
+//            }
         }
         return config;
     }
 
-    private void stopZeebe() {
+    private void shutdownCamunda() {
         if (devService != null) {
             try {
                 devService.close();
