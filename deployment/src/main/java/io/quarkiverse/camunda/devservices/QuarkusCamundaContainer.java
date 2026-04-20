@@ -1,24 +1,31 @@
 package io.quarkiverse.camunda.devservices;
 
-import io.camunda.process.test.impl.containers.CamundaContainer;
-import io.quarkus.devservices.common.ConfigureUtil;
+import static io.quarkiverse.camunda.devservices.DevServiceProcessor.DEV_SERVICE_LABEL;
+
+import org.jboss.logging.Logger;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
-import static io.quarkiverse.camunda.devservices.DevServiceProcessor.DEV_SERVICE_LABEL;
+import io.camunda.process.test.impl.containers.CamundaContainer;
+import io.camunda.process.test.impl.runtime.ContainerRuntimePorts;
+import io.quarkus.devservices.common.ConfigureUtil;
 
 public class QuarkusCamundaContainer extends CamundaContainer {
 
     private final int fixedExposedPort;
     private final int fixedExposedRestPort;
     private final boolean useSharedNetwork;
+    private static final Logger log = Logger.getLogger(QuarkusCamundaContainer.class);
+    public static final int DEFAULT_CAMUNDA_REST_PORT = ContainerRuntimePorts.CAMUNDA_REST_API;
+    public static final int DEFAULT_CAMUNDA_GRPC_PORT = ContainerRuntimePorts.CAMUNDA_GATEWAY_API;
 
     private String hostName = null;
 
     public QuarkusCamundaContainer(DockerImageName image, int fixedExposedPort, String serviceName,
-                                   boolean useSharedNetwork, boolean test, int testDebugExportPort, boolean devDebugExporter,
-                                   int debugExporterPort, int fixedExposedRestPort) {
+            boolean useSharedNetwork, boolean test, int testDebugExportPort, boolean devDebugExporter,
+            int debugExporterPort, int fixedExposedRestPort) {
         super(image);
         log.debugf("Camunda broker docker image %s", image);
         this.fixedExposedPort = fixedExposedPort;
@@ -39,8 +46,8 @@ public class QuarkusCamundaContainer extends CamundaContainer {
     }
 
     public void debugExporter(final int port) {
-        final int containerPort = HostPortForwarder.forwardHostPort(port, 5);
-        var receiver = "http://host.testcontainers.internal:" + containerPort + "/q/zeebe/records";
+        addExposedPort(port);
+        var receiver = "http://host.testcontainers.internal:" + port + "/q/zeebe/records";
         //noinspection resource
         withCopyToContainer(
                 MountableFile.forClasspathResource("debug-exporter.jar"), "/tmp/debug-exporter.jar")
@@ -56,8 +63,8 @@ public class QuarkusCamundaContainer extends CamundaContainer {
         super.configure();
 
         if (useSharedNetwork) {
-            hostName = ConfigureUtil.configureSharedNetwork(this, "zeebe");
-            addExposedPort(DEFAULT_ZEEBE_REST_PORT);
+            hostName = ConfigureUtil.configureSharedNetwork(this, "camunda");
+            addExposedPort(DEFAULT_CAMUNDA_REST_PORT);
             withEnv("CAMUNDA_BROKER_NETWORK_ADVERTISEDHOST", hostName);
             return;
         } else {
@@ -65,38 +72,29 @@ public class QuarkusCamundaContainer extends CamundaContainer {
         }
 
         if (fixedExposedPort > 0) {
-            addFixedExposedPort(fixedExposedPort, DEFAULT_ZEEBE_GRPC_PORT);
+            addFixedExposedPort(fixedExposedPort, DEFAULT_CAMUNDA_GRPC_PORT);
         } else {
-            addExposedPort(DEFAULT_ZEEBE_GRPC_PORT);
+            addExposedPort(DEFAULT_CAMUNDA_GRPC_PORT);
         }
         if (fixedExposedRestPort > 0) {
-            addFixedExposedPort(fixedExposedRestPort, DEFAULT_ZEEBE_REST_PORT);
+            addFixedExposedPort(fixedExposedRestPort, DEFAULT_CAMUNDA_REST_PORT);
         } else {
-            addExposedPort(DEFAULT_ZEEBE_REST_PORT);
+            addExposedPort(DEFAULT_CAMUNDA_REST_PORT);
         }
     }
 
-    public int getGrpcPort() {
-        if (useSharedNetwork) {
-            return DEFAULT_ZEEBE_GRPC_PORT;
-        }
-        if (fixedExposedPort > 0) {
-            return fixedExposedPort;
-        }
-        return super.getFirstMappedPort();
-    }
+    void withDebugExporter(final int port) {
+        addExposedPort(port);
 
-    public int getRestPort() {
-        if (useSharedNetwork) {
-            return DEFAULT_ZEEBE_REST_PORT;
-        }
-        if (fixedExposedPort > 0) {
-            return fixedExposedRestPort;
-        }
-        return super.getFirstMappedPort();
-    }
+        //noinspection resource
+        withCopyToContainer(
+                MountableFile.forClasspathResource("debug-exporter.jar"), "/tmp/debug-exporter.jar")
+                .withEnv("ZEEBE_BROKER_EXPORTERS_DEBUG_JARPATH", "/tmp/debug-exporter.jar")
+                .withEnv(
+                        "ZEEBE_BROKER_EXPORTERS_DEBUG_CLASSNAME", "io.zeebe.containers.exporter.DebugExporter")
+                .withEnv(
+                        "ZEEBE_BROKER_EXPORTERS_DEBUG_ARGS_URL",
+                        "http://" + GenericContainer.INTERNAL_HOST_HOSTNAME + ":" + port + "/records");
 
-    public String getZeebeHost() {
-        return useSharedNetwork ? hostName : super.getHost();
     }
 }

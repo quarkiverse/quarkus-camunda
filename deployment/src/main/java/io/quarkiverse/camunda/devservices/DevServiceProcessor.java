@@ -1,6 +1,7 @@
 package io.quarkiverse.camunda.devservices;
 
 import static io.quarkiverse.camunda.Processor.FEATURE_NAME;
+import static io.quarkiverse.camunda.devservices.QuarkusCamundaContainer.DEFAULT_CAMUNDA_GRPC_PORT;
 import static io.quarkus.runtime.LaunchMode.DEVELOPMENT;
 
 import java.io.Closeable;
@@ -21,7 +22,6 @@ import org.jboss.logging.Logger;
 import org.testcontainers.utility.DockerImageName;
 
 import io.camunda.client.CamundaClient;
-import io.camunda.process.test.impl.runtime.ContainerRuntimePorts;
 import io.quarkiverse.camunda.DevServiceBuildTimeConfig;
 import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -49,13 +49,11 @@ public class DevServiceProcessor {
             .withTag(DEFAULT_CAMUNDA_VERSION);
 
     private static final Logger log = Logger.getLogger(DevServiceProcessor.class);
-    static final String PROP_ZEEBE_GATEWAY_ADDRESS = "quarkus.camunda.client.broker.gateway-address";
-    static final String PROP_ZEEBE_REST_ADDRESS = "quarkus.camunda.client.broker.rest-address";
-    private static final String DEV_SERVICE_LABEL = "quarkus-dev-service-camunda";
-    public static final int DEFAULT_ZEEBE_GRPC_PORT = ContainerRuntimePorts.CAMUNDA_GATEWAY_API;
-    public static final int DEFAULT_ZEEBE_REST_PORT = ContainerRuntimePorts.CAMUNDA_REST_API;
+    static final String PROP_CAMUNDA_GATEWAY_ADDRESS = "quarkus.camunda.client.broker.gateway-address";
+    static final String PROP_CAMUNDA_REST_ADDRESS = "quarkus.camunda.client.broker.rest-address";
+    protected static final String DEV_SERVICE_LABEL = "quarkus-dev-service-camunda";
     private static final ContainerLocator zeebeContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL,
-            DEFAULT_ZEEBE_GRPC_PORT);
+            DEFAULT_CAMUNDA_GRPC_PORT);
     static volatile ZeebeRunningDevService devService;
     static volatile ZeebeDevServiceCfg runningConfiguration;
     static volatile boolean first = true;
@@ -122,8 +120,8 @@ public class DevServiceProcessor {
         runningConfiguration = configuration;
 
         if (devService.isOwner()) {
-            String tmp = devService.getConfig().get(PROP_ZEEBE_GATEWAY_ADDRESS);
-            log.infof("The zeebe broker is ready to accept connections on %s (http://%s)",
+            String tmp = devService.getConfig().get(PROP_CAMUNDA_GATEWAY_ADDRESS);
+            log.infof("Camunda is ready to accept connections on %s (http://%s)",
                     tmp, tmp);
         }
 
@@ -143,19 +141,19 @@ public class DevServiceProcessor {
 
         if (!config.devServicesEnabled) {
             // explicitly disabled
-            log.debug("Not starting dev services for Zeebe as it has been disabled in the config");
+            log.debug("Not starting dev services for Camunda as it has been disabled in the config");
             return null;
         }
 
-        if (ConfigUtils.isPropertyPresent(PROP_ZEEBE_GATEWAY_ADDRESS)) {
-            log.debug("Not starting dev services for Zeebe as '" + PROP_ZEEBE_GATEWAY_ADDRESS + "' have been provided");
+        if (ConfigUtils.isPropertyPresent(PROP_CAMUNDA_GATEWAY_ADDRESS)) {
+            log.debug("Not starting dev services for Camunda as '" + PROP_CAMUNDA_GATEWAY_ADDRESS + "' have been provided");
             return null;
         }
 
         if (!dockerStatusBuildItem.isContainerRuntimeAvailable()) {
             log.warn(
-                    "Docker isn't working, please configure the zeebe broker servers gateway property ("
-                            + PROP_ZEEBE_GATEWAY_ADDRESS + ").");
+                    "Docker isn't working, please configure the Camunda broker servers gateway property ("
+                            + PROP_CAMUNDA_GATEWAY_ADDRESS + ").");
             return null;
         }
 
@@ -222,8 +220,8 @@ public class DevServiceProcessor {
             Integer testDebugExportPort,
             boolean testExporter) {
         Map<String, String> config = new HashMap<>();
-        config.put(PROP_ZEEBE_GATEWAY_ADDRESS, grpcApiUri.toString());
-        config.put(PROP_ZEEBE_REST_ADDRESS, restApiUri.toString());
+        config.put(PROP_CAMUNDA_GATEWAY_ADDRESS, grpcApiUri.toString());
+        config.put(PROP_CAMUNDA_REST_ADDRESS, restApiUri.toString());
         if (test && testExporter) {
             if (testDebugExportPort != null) {
                 config.put("quarkiverse.zeebe.devservices.test.receiver-port", "" + testDebugExportPort);
@@ -241,7 +239,7 @@ public class DevServiceProcessor {
             try {
                 devService.close();
             } catch (Throwable e) {
-                log.error("Failed to stop the Zeebe broker", e);
+                log.error("Failed to stop Camunda", e);
             } finally {
                 devService = null;
             }
