@@ -1,4 +1,4 @@
-# Quarkus Zeebe
+# Quarkus Camunda
 
 
 [![Central](https://img.shields.io/maven-central/v/io.quarkiverse.zeebe/quarkus-zeebe-parent?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.zeebe/quarkus-zeebe-parent)

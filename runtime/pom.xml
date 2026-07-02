@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>io.quarkiverse.zeebe</groupId>
-        <artifactId>quarkus-zeebe-parent</artifactId>
+        <groupId>io.quarkiverse.camunda</groupId>
+        <artifactId>quarkus-camunda-parent</artifactId>
         <version>999-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>quarkus-zeebe</artifactId>
-    <name>Quarkus - Zeebe - Runtime</name>
-    <description>Zeebe Camunda cloud BPMN workflow engine</description>
+    <artifactId>quarkus-camunda</artifactId>
+    <name>Quarkus - Camunda - Runtime</name>
+    <description>Camunda cloud BPMN workflow engine</description>
 
     <dependencies>
         <dependency>
