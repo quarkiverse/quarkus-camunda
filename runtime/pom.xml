@@ -38,6 +38,12 @@
             <artifactId>quarkus-smallrye-health</artifactId>
             <optional>true</optional>
         </dependency>
+<!--        only needed for native build to resolve dependency-->
+        <dependency>
+            <groupId>com.github.luben</groupId>
+            <artifactId>zstd-jni</artifactId>
+            <version>1.5.7-11</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-opentelemetry</artifactId>

@@ -306,6 +306,32 @@ public class CamundaProcessor {
     }
 
     @BuildStep
+    IndexDependencyBuildItem indexCamundaClientJava() {
+        // camunda-client-java ships no Jandex index of its own; request one so the REST DTO
+        // package below can be enumerated instead of hand-listing every response/request class.
+        return new IndexDependencyBuildItem("io.camunda", "camunda-client-java");
+    }
+
+    @BuildStep
+    void registerRestProtocolDtosForReflection(CombinedIndexBuildItem combinedIndex,
+            BuildProducer<ReflectiveClassBuildItem> reflective) {
+        // Camunda 8.9 clients default to preferRestOverGrpc=true, so Jackson deserializes REST
+        // responses into io.camunda.client.protocol.rest.* DTOs via reflection - none of which are
+        // registered by camunda-client-java itself, so every one of them needs registering here.
+        List<String> classNames = combinedIndex.getIndex().getKnownClasses().stream()
+                .map(classInfo -> classInfo.name().toString())
+                .filter(name -> name.startsWith("io.camunda.client.protocol.rest."))
+                .toList();
+        if (!classNames.isEmpty()) {
+            reflective.produce(ReflectiveClassBuildItem.builder(classNames.toArray(new String[0]))
+                    .constructors(true)
+                    .methods(true)
+                    .fields(true)
+                    .build());
+        }
+    }
+
+    @BuildStep
     void addHealthCheck(BuildTimeConfig config, BuildProducer<HealthBuildItem> healthChecks) {
         healthChecks.produce(new HealthBuildItem(HealthCheck.class.getName(), config.health().enabled()));
         healthChecks.produce(new HealthBuildItem(TopologyHealthCheck.class.getName(), config.health().enabled()));
