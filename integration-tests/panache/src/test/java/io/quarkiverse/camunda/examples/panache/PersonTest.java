@@ -1,8 +1,6 @@
 package io.quarkiverse.camunda.examples.panache;
 
 import static io.restassured.RestAssured.given;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 
 import java.time.LocalDate;
 
@@ -10,8 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.process.test.assertions.BpmnAssert;
-import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
+import io.camunda.process.test.api.CamundaAssert;
+import io.camunda.process.test.api.assertions.ProcessInstanceSelectors;
 import io.quarkiverse.camunda.test.CamundaTestResource;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,7 +24,6 @@ public class PersonTest {
     //Configure the containers for the test
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        //        RestAssured.filters(new ResponseLoggingFilter());
     }
 
     @Test
@@ -41,8 +38,7 @@ public class PersonTest {
                 .then()
                 .extract().jsonPath().getLong("processInstanceKey");
 
-        ProcessInstanceAssert a = new ProcessInstanceAssert(processInstanceKey, BpmnAssert.getRecordStream());
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(ProcessInstanceSelectors.byKey(processInstanceKey)).isCompleted();
 
         Person response = given().contentType(ContentType.JSON)
                 .pathParam("name", dto.name).when()
@@ -67,8 +63,7 @@ public class PersonTest {
                 .then()
                 .extract().jsonPath().getLong("processInstanceKey");
 
-        ProcessInstanceAssert a = new ProcessInstanceAssert(processInstanceKey, BpmnAssert.getRecordStream());
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(ProcessInstanceSelectors.byKey(processInstanceKey)).isCompleted();
 
         Person response = given().contentType(ContentType.JSON)
                 .pathParam("name", dto.name).when()

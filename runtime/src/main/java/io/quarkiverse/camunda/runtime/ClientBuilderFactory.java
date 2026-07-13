@@ -2,11 +2,12 @@ package io.quarkiverse.camunda.runtime;
 
 import java.net.URI;
 
+import org.jboss.logging.Logger;
+
 import io.camunda.client.CredentialsProvider;
 import io.camunda.client.api.JsonMapper;
 import io.camunda.client.impl.CamundaClientBuilderImpl;
 import io.camunda.client.impl.oauth.OAuthCredentialsProviderBuilder;
-import org.jboss.logging.Logger;
 
 public class ClientBuilderFactory {
 

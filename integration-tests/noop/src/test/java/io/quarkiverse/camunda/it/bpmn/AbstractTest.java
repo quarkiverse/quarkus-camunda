@@ -10,7 +10,6 @@ public class AbstractTest {
     //Configure the containers for the test
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        //        RestAssured.filters(new ResponseLoggingFilter());
     }
 
 }

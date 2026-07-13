@@ -1,8 +1,6 @@
 package io.quarkiverse.camunda.it.bpmn.metrics;
 
 import static io.restassured.RestAssured.given;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import io.camunda.client.CamundaClient;
 import io.camunda.client.api.response.ProcessInstanceEvent;
-import io.camunda.zeebe.process.test.assertions.BpmnAssert;
-import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
+import io.camunda.process.test.api.CamundaAssert;
 import io.quarkiverse.camunda.it.bpmn.AbstractTest;
 import io.quarkiverse.camunda.test.InjectCamundaClient;
 import io.quarkus.test.junit.QuarkusTest;
@@ -55,8 +52,7 @@ public class MetricsTest extends AbstractTest {
                 .send().join();
 
         Assertions.assertEquals(BPM_PROCESS_ID, event.getBpmnProcessId());
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(event).isCompleted();
 
         String response = given()
                 .when()
@@ -85,8 +81,7 @@ public class MetricsTest extends AbstractTest {
                 .send().join();
 
         Assertions.assertEquals(BPM_PROCESS_ID, event.getBpmnProcessId());
-        a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(event).isCompleted();
 
         event = client
                 .newCreateInstanceCommand()
@@ -96,8 +91,7 @@ public class MetricsTest extends AbstractTest {
                 .send().join();
 
         Assertions.assertEquals(BPM_PROCESS_ID, event.getBpmnProcessId());
-        a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(event).isCompleted();
 
         response = given()
                 .when()

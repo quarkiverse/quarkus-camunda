@@ -317,7 +317,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Camunda gateway address. Default: localhost:26500
+Camunda gateway address. Default: http://localhost:26500
 
 
 ifdef::add-copy-button-to-env-var[]
@@ -328,7 +328,7 @@ Environment variable: `+++QUARKUS_CAMUNDA_CLIENT_BROKER_GATEWAY_ADDRESS+++`
 endif::add-copy-button-to-env-var[]
 --
 |link:https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html[URI]
-|`+++`http://localhost:26500`+++`
+|`+++http://localhost:26500+++`
 
 a| [[quarkus-camunda_quarkus-camunda-client-broker-rest-address]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-broker-rest-address[`+++quarkus.camunda.client.broker.rest-address+++`]##
 ifdef::add-copy-button-to-config-props[]
@@ -338,7 +338,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Camunda gateway rest address. Default: localhost:8080
+Camunda gateway rest address. Default: http://localhost:8080
 
 
 ifdef::add-copy-button-to-env-var[]
