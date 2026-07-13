@@ -24,7 +24,7 @@
   </scm>
   <properties>
     <quarkus.version>3.37.1</quarkus.version>
-    <camunda.version>8.9.0</camunda.version>
+    <camunda.version>8.9.12</camunda.version>
     <zeebe.testcontainers.version>3.6.9</zeebe.testcontainers.version>
     <quarkus-mockserver.version>1.17.0</quarkus-mockserver.version>
   </properties>
