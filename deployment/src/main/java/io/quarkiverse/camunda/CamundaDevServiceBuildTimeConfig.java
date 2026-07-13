@@ -26,13 +26,6 @@ public interface CamundaDevServiceBuildTimeConfig {
     interface CamundaDevMode {
 
         /**
-         * Disable or enabled zeebe dashboard dev-ui.
-         */
-        @WithName("dev-ui.enabled")
-        @WithDefault("true")
-        boolean devUIEnabled();
-
-        /**
          * Observe changes in the bpmn files.
          */
         @WithName("watch-bpmn-files")

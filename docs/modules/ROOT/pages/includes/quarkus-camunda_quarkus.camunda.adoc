@@ -120,27 +120,6 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++false+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-dev-mode-dev-ui-enabled]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-dev-mode-dev-ui-enabled[`+++quarkus.camunda.dev-mode.dev-ui.enabled+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.dev-mode.dev-ui.enabled+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Disable or enabled zeebe dashboard dev-ui.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEV_MODE_DEV_UI_ENABLED+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEV_MODE_DEV_UI_ENABLED+++`
-endif::add-copy-button-to-env-var[]
---
-|boolean
-|`+++true+++`
-
 a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-dev-mode-watch-bpmn-files]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-dev-mode-watch-bpmn-files[`+++quarkus.camunda.dev-mode.watch-bpmn-files+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.camunda.dev-mode.watch-bpmn-files+++[]

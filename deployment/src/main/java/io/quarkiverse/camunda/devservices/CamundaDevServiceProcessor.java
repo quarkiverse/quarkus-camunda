@@ -21,7 +21,6 @@ import io.camunda.client.CamundaClient;
 import io.quarkiverse.camunda.CamundaDevServiceBuildTimeConfig;
 import io.quarkiverse.camunda.testcontainer.CamundaContainer;
 import io.quarkus.deployment.IsProduction;
-import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CuratedApplicationShutdownBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
@@ -62,7 +61,6 @@ public class CamundaDevServiceProcessor {
             Optional<ConsoleInstalledBuildItem> consoleInstalledBuildItem,
             CuratedApplicationShutdownBuildItem closeBuildItem,
             DockerStatusBuildItem dockerStatusBuildItem,
-            BuildProducer<CamundaDevServicesProviderBuildItem> startResultProducer,
             LoggingSetupBuildItem loggingSetupBuildItem,
             io.quarkus.deployment.dev.devservices.DevServicesConfig devServicesConfig) {
 
