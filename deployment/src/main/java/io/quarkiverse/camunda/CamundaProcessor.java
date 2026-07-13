@@ -88,6 +88,7 @@ public class CamundaProcessor {
         if (capabilities.isPresent(Capability.OPENTELEMETRY_TRACER)) {
             additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(OpenTelemetryTracingRecorder.class));
             additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(OpenTelemetryClientInterceptor.class));
+            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(OpenTelemetryHttpChainHandler.class));
         } else {
             additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(DefaultTracingRecorder.class));
         }

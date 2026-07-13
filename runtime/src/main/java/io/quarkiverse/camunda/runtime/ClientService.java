@@ -5,6 +5,7 @@ import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.Produces;
 
+import org.apache.hc.client5.http.async.AsyncExecChainHandler;
 import org.jboss.logging.Logger;
 
 import io.camunda.client.CamundaClient;
@@ -21,11 +22,13 @@ public class ClientService {
     CamundaClient client;
 
     public ClientService(RuntimeConfig config, JsonMapper jsonMapper,
-            @Any Instance<ClientInterceptor> interceptors) {
+            @Any Instance<ClientInterceptor> interceptors,
+            @Any Instance<AsyncExecChainHandler> chainHandlers) {
         if (config.active()) {
             log.infof("Creating new camunda client for %s", config.client().broker().gatewayAddress());
             CamundaClientBuilder builder = ClientBuilderFactory.createBuilder(config.client(), jsonMapper);
             interceptors.forEach(x -> builder.withInterceptors(x::interceptCall));
+            chainHandlers.forEach(builder::withChainHandlers);
             client = builder.build();
         } else {
             log.infof("Camunda extension is disabled");
