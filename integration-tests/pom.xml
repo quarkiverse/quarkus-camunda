@@ -16,7 +16,6 @@
         <module>bpmn</module>
         <module>docker</module>
         <module>opentelemetry</module>
-        <module>embedded</module>
         <module>panache</module>
         <module>noop</module>
     </modules>
