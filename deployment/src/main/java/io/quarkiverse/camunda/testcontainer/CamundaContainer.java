@@ -55,20 +55,24 @@ public class CamundaContainer extends GenericContainer<CamundaContainer> {
     private static final String CAMUNDA_EXPORTER_CLASSNAME = "io.camunda.exporter.CamundaExporter";
     private static final String CAMUNDA_EXPORTER_BULK_SIZE = "1";
 
+    private final boolean useSharedNetwork;
+    private String hostName;
+
     public CamundaContainer(final DockerImageName dockerImageName, String serviceName, boolean useSharedNetwork) {
         super(dockerImageName);
 
         log.debugf("Camunda broker docker image %s", dockerImageName);
 
+        this.useSharedNetwork = useSharedNetwork;
+
+        applyDefaultConfiguration();
+
         if (useSharedNetwork) {
-            String hostName = ConfigureUtil.configureSharedNetwork(this, "camunda");
+            hostName = ConfigureUtil.configureSharedNetwork(this, "camunda");
             withEnv("CAMUNDA_CLUSTER_NETWORK_ADVERTISEDHOST", hostName);
-            return;
         } else {
             withNetwork(Network.SHARED);
         }
-
-        applyDefaultConfiguration();
 
         if (serviceName != null) {
             withLabel(DEV_SERVICE_LABEL, serviceName);
@@ -238,16 +242,43 @@ public class CamundaContainer extends GenericContainer<CamundaContainer> {
         return getMappedPort(CamundaContainerRuntimePorts.CAMUNDA_REST_API);
     }
 
+    /**
+     * Address the application should use. On a shared network the application itself runs in a
+     * container, so it must address the broker by its network alias and internal port - the
+     * host-mapped port is not reachable from there.
+     */
     public URI getGrpcApiAddress() {
-        return toUriWithPort(getGrpcApiPort());
+        if (useSharedNetwork) {
+            return toInternalUriWithPort(CamundaContainerRuntimePorts.CAMUNDA_GATEWAY_API);
+        }
+        return getExternalGrpcApiAddress();
     }
 
     public URI getRestApiAddress() {
+        if (useSharedNetwork) {
+            return toInternalUriWithPort(CamundaContainerRuntimePorts.CAMUNDA_REST_API);
+        }
+        return getExternalRestApiAddress();
+    }
+
+    /**
+     * Host-reachable address, for consumers running on the host JVM (e.g. the test resource)
+     * regardless of the network mode.
+     */
+    public URI getExternalGrpcApiAddress() {
+        return toUriWithPort(getGrpcApiPort());
+    }
+
+    public URI getExternalRestApiAddress() {
         return toUriWithPort(getRestApiPort());
     }
 
     private URI toUriWithPort(final int port) {
         return URI.create("http://" + getHost() + ":" + port);
+    }
+
+    private URI toInternalUriWithPort(final int port) {
+        return URI.create("http://" + hostName + ":" + port);
     }
 
     public URI getMonitoringApiAddress() {

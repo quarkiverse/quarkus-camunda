@@ -42,6 +42,10 @@
             <artifactId>quarkus-devservices-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-devservices-deployment</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.quarkiverse.camunda</groupId>
             <artifactId>quarkus-camunda</artifactId>
             <version>${project.version}</version>

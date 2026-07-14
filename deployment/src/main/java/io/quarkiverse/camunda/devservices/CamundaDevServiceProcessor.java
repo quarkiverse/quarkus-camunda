@@ -187,32 +187,37 @@ public class CamundaDevServiceProcessor {
 
             container.start();
 
-            URI grpcApiUri = container.getGrpcApiAddress();
-            URI restApiUri = container.getRestApiAddress();
-
+            // the application may itself run in a container (shared network) and needs the
+            // network-internal address, while the test resource always runs on the host JVM
+            // and needs the host-mapped one
             return new CamundaRunningDevService(FEATURE_NAME,
                     container.getContainerId(),
                     new CamundaContainerShutdownCloseable(container, FEATURE_NAME),
-                    configMap(grpcApiUri, restApiUri, launchMode.isTest()));
+                    configMap(container.getGrpcApiAddress(), container.getRestApiAddress(),
+                            container.getExternalGrpcApiAddress(), container.getExternalRestApiAddress(),
+                            launchMode.isTest()));
         };
 
         return maybeContainerAddress
-                .map(containerAddress -> new CamundaRunningDevService(FEATURE_NAME,
-                        containerAddress.getId(),
-                        null,
-                        configMap(URI.create(containerAddress.getUrl()), URI.create(containerAddress.getUrl()),
-                                launchMode.isTest())))
+                .map(containerAddress -> {
+                    URI url = URI.create(containerAddress.getUrl());
+                    return new CamundaRunningDevService(FEATURE_NAME,
+                            containerAddress.getId(),
+                            null,
+                            configMap(url, url, url, url, launchMode.isTest()));
+                })
                 .orElseGet(defaultCamundaBrokerSupplier);
     }
 
-    private static Map<String, String> configMap(URI grpcApiUri, URI restApiUri, boolean test) {
+    private static Map<String, String> configMap(URI grpcApiUri, URI restApiUri,
+            URI externalGrpcApiUri, URI externalRestApiUri, boolean test) {
         Map<String, String> config = new HashMap<>();
         config.put(PROP_CAMUNDA_GATEWAY_ADDRESS, grpcApiUri.toString());
         config.put(PROP_CAMUNDA_REST_ADDRESS, restApiUri.toString());
 
         if (test) {
-            config.put("quarkiverse.camunda.devservices.test.gateway-address", grpcApiUri.toString());
-            config.put("quarkiverse.camunda.devservices.test.rest-address", restApiUri.toString());
+            config.put("quarkiverse.camunda.devservices.test.gateway-address", externalGrpcApiUri.toString());
+            config.put("quarkiverse.camunda.devservices.test.rest-address", externalRestApiUri.toString());
         }
         return config;
     }
