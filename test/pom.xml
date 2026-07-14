@@ -12,6 +12,19 @@
     <name>Quarkus - Zeebe - Test</name>
     <description>Test Zeebe Camunda cloud BPMN workflow engine</description>
 
+    <distributionManagement>
+        <relocation>
+            <groupId>io.quarkiverse.camunda</groupId>
+            <artifactId>quarkus-camunda-test</artifactId>
+            <version>2.0.0</version>
+            <message>
+                Update the groupId and artifactId in your project build file.
+                Refer to https://docs.quarkiverse.io/quarkus-zeebe/dev/index.html#_upgrade for more information.
+                Please migrate to Quarkus Camunda since this artifact will not be longer supported.
+            </message>
+        </relocation>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>io.quarkiverse.zeebe</groupId>
