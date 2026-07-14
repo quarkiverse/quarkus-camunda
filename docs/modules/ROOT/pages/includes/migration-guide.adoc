@@ -9,6 +9,7 @@
 - Fixed ports configuration for dev services were removed, since it is not recommended by testcontainers.
 - Removed debug exporter and all config options for this feature.
 - Devservices use the Camunda Orchestration image now with an integrated H2 database.
+- Dev UI was removed because it relied on the removed zeebe debug exporter.
 
 
 ==== Version >=0.8.0

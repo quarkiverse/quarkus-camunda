@@ -38,9 +38,9 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Indicates if the Zeebe server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Zeebe starts a new container.
+Indicates if the Camunda server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Camunda starts a new container.
 
-The discovery uses the `quarkus-dev-service-zeebe` label. The value is configured using the `service-name` property.
+The discovery uses the `quarkus-dev-service-camunda` label. The value is configured using the `service-name` property.
 
 Container sharing is only used in dev mode.
 
@@ -63,7 +63,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-The value of the `quarkus-dev-service-zeebe` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Zeebe looks for a container with the `quarkus-dev-service-zeebe` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-zeebe` label set to the specified value.
+The value of the `quarkus-dev-service-zeebe` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Camunda looks for a container with the `quarkus-dev-service-camunda` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-zeebe` label set to the specified value.
 
 This property is used when you need multiple shared Zeebe servers.
 
@@ -1199,7 +1199,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Zeebe client is active
+Camunda client is active
 
 
 ifdef::add-copy-button-to-env-var[]
