@@ -18,7 +18,7 @@ public class LifecycleManager {
         try {
             client.close();
         } catch (Exception e) {
-            Log.error("The shutdown of the Zeebe client failed", e);
+            Log.error("The shutdown of the Camunda client failed", e);
         }
     }
 }

@@ -11,13 +11,13 @@ import io.smallrye.config.WithName;
 public interface RuntimeConfig {
 
     /**
-     * Zeebe client broker configuration.
+     * Camunda client broker configuration.
      */
     @WithName("client")
     ClientRuntimeConfig client();
 
     /**
-     * Zeebe client is active
+     * Camunda client is active
      */
     @WithName("active")
     @WithDefault("true")

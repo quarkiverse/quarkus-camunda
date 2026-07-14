@@ -19,7 +19,7 @@ public class TopologyHealthCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Zeebe topology health check");
+        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Camunda topology health check");
         try {
             Topology topology = client.newTopologyRequest().send().join();
             if (topology.getClusterSize() > 0) {

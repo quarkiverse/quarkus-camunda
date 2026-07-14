@@ -50,12 +50,12 @@ public class CamundaDevServiceProcessor {
     public static final String DEV_SERVICE_LABEL = "quarkus-dev-service-camunda";
     private static final ContainerLocator camundaContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL, CAMUNDA_REST_API);
     static volatile CamundaRunningDevService devService;
-    static volatile ZeebeDevServiceCfg runningConfiguration;
+    static volatile CamundaDevServiceCfg runningConfiguration;
     static volatile boolean first = true;
 
     @BuildStep(onlyIfNot = IsProduction.class, onlyIf = {
             io.quarkus.deployment.dev.devservices.DevServicesConfig.Enabled.class })
-    public DevServicesResultBuildItem startZeebeContainers(LaunchModeBuildItem launchMode,
+    public DevServicesResultBuildItem startCamundaContainers(LaunchModeBuildItem launchMode,
             List<DevServicesSharedNetworkBuildItem> devServicesSharedNetworkBuildItem,
             CamundaDevServiceBuildTimeConfig buildTimeConfig,
             Optional<ConsoleInstalledBuildItem> consoleInstalledBuildItem,
@@ -64,7 +64,7 @@ public class CamundaDevServiceProcessor {
             LoggingSetupBuildItem loggingSetupBuildItem,
             io.quarkus.deployment.dev.devservices.DevServicesConfig devServicesConfig) {
 
-        ZeebeDevServiceCfg configuration = getConfiguration(buildTimeConfig);
+        CamundaDevServiceCfg configuration = getConfiguration(buildTimeConfig);
 
         if (devService != null) {
             boolean shouldShutdownTheBroker = !configuration.equals(runningConfiguration);
@@ -136,7 +136,7 @@ public class CamundaDevServiceProcessor {
     }
 
     private CamundaRunningDevService startCamunda(DockerStatusBuildItem dockerStatusBuildItem,
-            ZeebeDevServiceCfg config,
+            CamundaDevServiceCfg config,
             LaunchModeBuildItem launchMode, boolean useSharedNetwork, Optional<Duration> timeout) {
 
         if (!config.devServicesEnabled) {
@@ -229,12 +229,12 @@ public class CamundaDevServiceProcessor {
         }
     }
 
-    private ZeebeDevServiceCfg getConfiguration(CamundaDevServiceBuildTimeConfig cfg) {
+    private CamundaDevServiceCfg getConfiguration(CamundaDevServiceBuildTimeConfig cfg) {
         CamundaDevServicesConfig camundaDevServicesConfig = cfg.devService();
-        return new ZeebeDevServiceCfg(camundaDevServicesConfig);
+        return new CamundaDevServiceCfg(camundaDevServicesConfig);
     }
 
-    private static final class ZeebeDevServiceCfg {
+    private static final class CamundaDevServiceCfg {
         private final boolean devServicesEnabled;
         private final String imageName;
         private final boolean shared;
@@ -242,7 +242,7 @@ public class CamundaDevServiceProcessor {
 
         private final boolean reuse;
 
-        public ZeebeDevServiceCfg(CamundaDevServicesConfig config) {
+        public CamundaDevServiceCfg(CamundaDevServicesConfig config) {
             this.devServicesEnabled = config.enabled();
             this.imageName = config.imageName().orElse(null);
             this.shared = config.shared();
@@ -258,7 +258,7 @@ public class CamundaDevServiceProcessor {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            ZeebeDevServiceCfg that = (ZeebeDevServiceCfg) o;
+            CamundaDevServiceCfg that = (CamundaDevServiceCfg) o;
             return devServicesEnabled == that.devServicesEnabled && Objects.equals(imageName, that.imageName);
         }
 

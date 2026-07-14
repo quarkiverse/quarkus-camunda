@@ -22,7 +22,7 @@ public class HealthCheck implements org.eclipse.microprofile.health.HealthCheck 
 
     @Override
     public HealthCheckResponse call() {
-        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Zeebe health check");
+        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Camunda health check");
         try {
             Topology topology = client.newTopologyRequest().send().join();
             List<BrokerInfo> brokers = topology.getBrokers();
