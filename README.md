@@ -1,9 +1,9 @@
 # Quarkus Camunda
 
 
-[![Central](https://img.shields.io/maven-central/v/io.quarkiverse.zeebe/quarkus-zeebe-parent?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.zeebe/quarkus-zeebe-parent)
+[![Central](https://img.shields.io/maven-central/v/io.quarkiverse.camunda/quarkus-camunda-parent?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.camunda/quarkus-camunda-parent)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
-[![Build](https://github.com/quarkiverse/quarkus-zeebe/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/quarkiverse/quarkus-zeebe/actions/workflows/build.yml)
+[![Build](https://github.com/quarkiverse/quarkus-camunda/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/quarkiverse/quarkus-camunda/actions/workflows/build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -12,7 +12,7 @@ Quarkus [Camunda](https://docs.camunda.io/docs/components/orchestration-cluster/
 
 ## Documentation
 
-Refer to the comprehensive [documentation](https://quarkiverse.github.io/quarkiverse-docs/quarkus-zeebe/dev/index.html) for detailed information and usage guidelines.
+Refer to the comprehensive [documentation](https://quarkiverse.github.io/quarkiverse-docs/quarkus-camunda/dev/index.html) for detailed information and usage guidelines.
 
 ## Contributing
 For coding guidelines and IDE formatting see [Quarkus Coding Guidelines](https://github.com/quarkusio/quarkus/blob/main/CONTRIBUTING.md#ide-config-and-code-style).
