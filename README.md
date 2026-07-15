@@ -8,7 +8,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Quarkus [Zeebe](https://docs.camunda.io/docs/components/zeebe/zeebe-overview/) extension. Camunda’s cloud-native design provides the performance, resilience, and security enterprises need to future-proof their process orchestration efforts.
+Quarkus [Camunda](https://docs.camunda.io/docs/components/orchestration-cluster/) extension. Camunda’s cloud-native design provides the performance, resilience, and security enterprises need to future-proof their process orchestration efforts.
 
 ## Documentation
 

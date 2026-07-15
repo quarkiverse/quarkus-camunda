@@ -1,18 +1,18 @@
 package io.quarkiverse.camunda.it.bpmn.errors;
 
-import static io.camunda.zeebe.process.test.assertions.BpmnAssert.assertThat;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
+import static io.camunda.process.test.api.CamundaAssert.assertThat;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
-import io.camunda.zeebe.process.test.assertions.IncidentAssert;
-import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
-import io.camunda.zeebe.protocol.record.value.ErrorType;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.api.search.enums.IncidentErrorType;
+import io.camunda.client.api.search.response.Incident;
+import io.camunda.process.test.api.assertions.ProcessInstanceAssert;
 import io.quarkiverse.camunda.it.bpmn.AbstractTest;
 import io.quarkiverse.camunda.test.InjectCamundaClient;
 import io.quarkus.test.junit.QuarkusTest;
@@ -22,7 +22,7 @@ import io.quarkus.test.junit.QuarkusTest;
 public class ErrorsTest extends AbstractTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     private final static String FAIL_PROCESS_ID = "fail-process";
     private final static String THROW_ERROR_PROCESS_ID = "throw-zeebe-error-process";
@@ -41,12 +41,12 @@ public class ErrorsTest extends AbstractTest {
 
         Assertions.assertEquals(THROW_ERROR_PROCESS_ID, event.getBpmnProcessId());
 
-        ProcessInstanceAssert a = assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::hasAnyIncidents);
-        IncidentAssert incident = a.extractingLatestIncident();
-        incident.hasErrorType(ErrorType.UNHANDLED_ERROR_EVENT);
-        incident.extractingErrorMessage().isEqualTo(
-                "Expected to throw an error event with the code 'error-code' with message 'error-message', but it was not caught. No error events are available in the scope.");
+        assertThat(event).hasActiveIncidents();
+        Incident incident = latestIncident(event.getProcessInstanceKey());
+        Assertions.assertEquals(IncidentErrorType.UNHANDLED_ERROR_EVENT, incident.getErrorType());
+        Assertions.assertEquals(
+                "Expected to throw an error event with the code 'error-code' with message 'error-message', but it was not caught. No error events are available in the scope.",
+                incident.getErrorMessage());
     }
 
     @Test
@@ -61,8 +61,7 @@ public class ErrorsTest extends AbstractTest {
 
         Assertions.assertEquals(THROW_ERROR_EVENT_PROCESS_ID, event.getBpmnProcessId());
 
-        ProcessInstanceAssert a = assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        ProcessInstanceAssert a = assertThat(event).isCompleted();
     }
 
     @Test
@@ -77,13 +76,10 @@ public class ErrorsTest extends AbstractTest {
 
         Assertions.assertEquals(THROW_RUNTIME_EXCEPTION_PROCESS_ID, event.getBpmnProcessId());
 
-        ProcessInstanceAssert a = assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::hasAnyIncidents);
-        IncidentAssert incident = a.extractingLatestIncident();
-        incident.hasErrorType(ErrorType.JOB_NO_RETRIES);
-        incident.extractingErrorMessage()
-                .startsWith("java.lang.RuntimeException: error-code");
-
+        assertThat(event).hasActiveIncidents();
+        Incident incident = latestIncident(event.getProcessInstanceKey());
+        Assertions.assertEquals(IncidentErrorType.JOB_NO_RETRIES, incident.getErrorType());
+        Assertions.assertTrue(incident.getErrorMessage().startsWith("java.lang.RuntimeException: error-code"));
     }
 
     @Test
@@ -98,11 +94,16 @@ public class ErrorsTest extends AbstractTest {
 
         Assertions.assertEquals(FAIL_PROCESS_ID, event.getBpmnProcessId());
 
-        ProcessInstanceAssert a = assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::hasAnyIncidents);
-        IncidentAssert incident = a.extractingLatestIncident();
-        incident.hasErrorType(ErrorType.JOB_NO_RETRIES);
-        incident.extractingErrorMessage()
-                .startsWith("error message");
+        assertThat(event).hasActiveIncidents();
+        Incident incident = latestIncident(event.getProcessInstanceKey());
+        Assertions.assertEquals(IncidentErrorType.JOB_NO_RETRIES, incident.getErrorType());
+        Assertions.assertTrue(incident.getErrorMessage().startsWith("error message"));
+    }
+
+    private Incident latestIncident(long processInstanceKey) {
+        List<Incident> incidents = client.newIncidentsByProcessInstanceSearchRequest(processInstanceKey)
+                .sort(s -> s.creationTime().desc())
+                .send().join().items();
+        return incidents.get(0);
     }
 }

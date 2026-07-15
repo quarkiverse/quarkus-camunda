@@ -11,8 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
-import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.client.api.response.ActivatedJob;
+import io.camunda.client.api.worker.JobClient;
 import io.quarkiverse.camunda.*;
 import io.quarkus.logging.Log;
 

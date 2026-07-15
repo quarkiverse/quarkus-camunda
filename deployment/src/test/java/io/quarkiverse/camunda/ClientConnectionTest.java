@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.camunda.zeebe.client.api.response.Topology;
+import io.camunda.client.api.response.Topology;
 import io.quarkiverse.camunda.test.TestService;
 import io.quarkus.test.QuarkusUnitTest;
 

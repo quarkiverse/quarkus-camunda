@@ -1,14 +1,12 @@
 package io.quarkiverse.camunda.it.bpmn.sayhello;
 
 import static io.restassured.RestAssured.given;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.process.test.assertions.BpmnAssert;
-import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
+import io.camunda.process.test.api.CamundaAssert;
+import io.camunda.process.test.api.assertions.ProcessInstanceSelectors;
 import io.quarkiverse.camunda.it.bpmn.AbstractTest;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -31,10 +29,10 @@ public class SayHelloTest extends AbstractTest {
                 .then().log().body().extract()
                 .jsonPath().getLong("processInstanceKey");
 
-        ProcessInstanceAssert a = new ProcessInstanceAssert(processInstanceKey, BpmnAssert.getRecordStream());
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
-        a.hasVariableWithValue("name", "name-test-input");
-        a.hasVariableWithValue("message", "Hi, name-test-input");
+        CamundaAssert.assertThat(ProcessInstanceSelectors.byKey(processInstanceKey))
+                .isCompleted()
+                .hasVariable("name", "name-test-input")
+                .hasVariable("message", "Hi, name-test-input");
     }
 
 }

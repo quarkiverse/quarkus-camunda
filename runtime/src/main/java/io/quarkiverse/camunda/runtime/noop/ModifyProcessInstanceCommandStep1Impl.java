@@ -3,9 +3,9 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.ModifyProcessInstanceCommandStep1;
-import io.camunda.zeebe.client.api.response.ModifyProcessInstanceResponse;
-import io.camunda.zeebe.client.impl.response.ModifyProcessInstanceResponseImpl;
+import io.camunda.client.api.command.ModifyProcessInstanceCommandStep1;
+import io.camunda.client.api.response.ModifyProcessInstanceResponse;
+import io.camunda.client.impl.response.ModifyProcessInstanceResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class ModifyProcessInstanceCommandStep1Impl extends AbstractStep<ModifyProcessInstanceResponse>
@@ -24,6 +24,56 @@ public class ModifyProcessInstanceCommandStep1Impl extends AbstractStep<ModifyPr
 
     @Override
     public ModifyProcessInstanceCommandStep2 terminateElement(long elementInstanceKey) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep2 terminateElements(String elementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElements(String sourceElementId, String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElements(String sourceElementId, String targetElementId,
+            long ancestorElementInstanceKey) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementsWithInferredAncestor(String sourceElementId, String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementsWithSourceParentAsAncestor(String sourceElementId,
+            String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElement(long sourceElementInstanceKey, String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElement(long sourceElementInstanceKey, String targetElementId,
+            long ancestorElementInstanceKey) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementWithInferredAncestor(long sourceElementInstanceKey,
+            String targetElementId) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep3 moveElementWithSourceParentAsAncestor(long sourceElementInstanceKey,
+            String targetElementId) {
         return this;
     }
 
@@ -87,4 +137,18 @@ public class ModifyProcessInstanceCommandStep1Impl extends AbstractStep<ModifyPr
         return new ModifyProcessInstanceResponseImpl(GatewayOuterClass.ModifyProcessInstanceResponse.getDefaultInstance());
     }
 
+    @Override
+    public ModifyProcessInstanceCommandStep2 operationReference(long operationReference) {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep1 useRest() {
+        return this;
+    }
+
+    @Override
+    public ModifyProcessInstanceCommandStep1 useGrpc() {
+        return this;
+    }
 }

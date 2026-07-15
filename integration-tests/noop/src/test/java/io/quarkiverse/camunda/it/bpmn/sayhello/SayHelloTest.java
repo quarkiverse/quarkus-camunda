@@ -29,8 +29,6 @@ public class SayHelloTest extends AbstractTest {
                 .post("/say-hello")
                 .then().log().body().extract();
 
-        long processInstanceKey = extract
-                .jsonPath().getLong("processInstanceKey");
         String workerVariable = extract
                 .jsonPath().getString("variablesAsMap.name");
 

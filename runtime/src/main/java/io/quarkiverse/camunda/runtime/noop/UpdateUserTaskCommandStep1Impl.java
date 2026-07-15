@@ -1,9 +1,10 @@
 package io.quarkiverse.camunda.runtime.noop;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
-import io.camunda.zeebe.client.api.command.UpdateUserTaskCommandStep1;
-import io.camunda.zeebe.client.api.response.UpdateUserTaskResponse;
+import io.camunda.client.api.command.UpdateUserTaskCommandStep1;
+import io.camunda.client.api.response.UpdateUserTaskResponse;
 
 public class UpdateUserTaskCommandStep1Impl extends AbstractStep<UpdateUserTaskResponse> implements UpdateUserTaskCommandStep1 {
     @Override
@@ -17,12 +18,22 @@ public class UpdateUserTaskCommandStep1Impl extends AbstractStep<UpdateUserTaskR
     }
 
     @Override
+    public UpdateUserTaskCommandStep1 dueDate(OffsetDateTime dueDate) {
+        return this;
+    }
+
+    @Override
     public UpdateUserTaskCommandStep1 clearDueDate() {
         return this;
     }
 
     @Override
     public UpdateUserTaskCommandStep1 followUpDate(String followUpDate) {
+        return this;
+    }
+
+    @Override
+    public UpdateUserTaskCommandStep1 followUpDate(OffsetDateTime followUpDate) {
         return this;
     }
 
@@ -58,6 +69,11 @@ public class UpdateUserTaskCommandStep1Impl extends AbstractStep<UpdateUserTaskR
 
     @Override
     public UpdateUserTaskCommandStep1 clearCandidateUsers() {
+        return this;
+    }
+
+    @Override
+    public UpdateUserTaskCommandStep1 priority(Integer priority) {
         return this;
     }
 

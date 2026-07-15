@@ -59,7 +59,7 @@ quarkus.camunda.dev-mode.watch-job-worker=true
 
 [source,properties]
 ----
-quarkus.camunda.client.broker.gateway-address=localhost:26500
+quarkus.camunda.client.broker.gateway-address=http://localhost:26500
 # If you are sure that there is already an instance running, yu can directly deactivate it
 quarkus.camunda.devservices.enabled=false
 quarkus.camunda.devservices.shared=true
@@ -157,29 +157,20 @@ If you already have your Quarkus project configured, you can add the `quarkus-op
 
 === Dev-Services
 Dev Services for Camunda is automatically enabled unless:
-* `quarkus.camunda.devservices.enabled` is set to false
+
+* `quarkus.camunda.devservices.enabled` is set to `false`
 * `quarkus.camunda.broker.gateway-address` is configured
+* `quarkus.camunda.broker.rest-address` is configured
 
 Dev Service for Camunda relies on Docker to start the broker. If your environment does not support Docker, you will need
 to start the broker manually, or connect to an already running broker. You can configure the broker address using
-`quarkus.camunda.broker.gateway-address`.
+`quarkus.camunda.broker.gateway-address` OR `quarkus.camunda.broker.rest-address` depending if you want to use grpc or rest.
 
-image::devservice.svg[DevService]
 
 To activate Dev Service use this configuration:
 [source,properties]
 ----
 quarkus.camunda.devservices.enabled=true
-----
-
-=== Dev-UI
-
-image::devui.png[DevUI]
-
-The Camunda Dev-UI is activated by default. You can disable it by changing this property:
-[source,properties]
-----
-quarkus.camunda.dev-ui.enabled=true
 ----
 
 == Usage
@@ -402,7 +393,8 @@ The return type `Uni<Void>` instructs the job worker to execute the method on th
 
 == Testing
 
-To use the test extension, add this dependency to the project:
+=== Camunda Process Test
+To use the Camunda test extension, add this dependency to the project:
 [source,xml]
 ----
 <dependency>
@@ -412,26 +404,24 @@ To use the test extension, add this dependency to the project:
     <scope>test</scope>
 </dependency>
 ----
-image::testing.svg[Test]
 
-To use the `CamundaClient` and `BpmnAssert` in the tests use the `@QuarkusTestResource(CamundaTestResource.class)` and enable this configuration:
-[source,properties]
-----
-quarkus.camunda.devservices.enabled=true
-----
+This extension is setting up the Camunda Client for the test environment.
+
+To use the `CamundaClient` and `CamundaAssert` in the tests use the `@QuarkusTestResource(CamundaTestResource.class)`:
+
 Test example
 [source,java]
 ----
 import io.quarkiverse.camunda.test.CamundaTestResource;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 
 @QuarkusTest
 @QuarkusTestResource(CamundaTestResource.class)
 public class BaseTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     @Test
     public void startProcessTest() {
@@ -439,8 +429,7 @@ public class BaseTest {
                 .bpmnProcessId("test").latestVersion()
                 .variables(Map.of("k","v")).send().join();
 
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(event).isCompleted();
     }
 }
 ----
@@ -454,37 +443,7 @@ public class BaseIT extends BaseTest {
 
 }
 ----
-For more information check examples in the `integration-tests` directory in this repo.
-
-=== Testing with embedded engine
-
-[quote]
-The Camunda process test embedded engine requires Java version >= 17
-
-[source,java]
-----
-import io.quarkiverse.camunda.test.CamundaTestEmbeddedResource;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.camunda.zeebe.client.ZeebeClient;
-
-@QuarkusTest
-@QuarkusTestResource(CamundaTestEmbeddedResource.class)
-public class BaseTest {
-
-    @InjectCamundaClient
-    ZeebeClient client;
-
-    @Test
-    public void startProcessTest() {
-        ProcessInstanceEvent event = client.newCreateInstanceCommand()
-                .bpmnProcessId("test").latestVersion()
-                .variables(Map.of("k","v")).send().join();
-
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
-    }
-}
-----
+For more information check examples in the `integration-tests` directory in this repo and the link:++https://docs.camunda.io/docs/apis-tools/testing/getting-started/[official documentation]++[official documentation] by Camunda.
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference

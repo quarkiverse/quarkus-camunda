@@ -1,16 +1,39 @@
 package io.quarkiverse.camunda.runtime.devmode;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.command.PublishMessageCommandStep1;
-import io.camunda.zeebe.client.api.response.*;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.command.PublishMessageCommandStep1;
+import io.camunda.client.api.response.BroadcastSignalResponse;
+import io.camunda.client.api.response.DeploymentEvent;
+import io.camunda.client.api.response.ProcessInstanceEvent;
+import io.camunda.client.api.response.PublishMessageResponse;
+import io.camunda.client.api.response.SetVariablesResponse;
 import io.camunda.zeebe.model.bpmn.instance.FlowElement;
 import io.camunda.zeebe.protocol.record.intent.IncidentIntent;
 import io.camunda.zeebe.protocol.record.intent.ProcessInstanceIntent;
-import io.camunda.zeebe.protocol.record.value.*;
+import io.camunda.zeebe.protocol.record.value.BpmnElementType;
+import io.camunda.zeebe.protocol.record.value.ErrorRecordValue;
+import io.camunda.zeebe.protocol.record.value.EscalationRecordValue;
+import io.camunda.zeebe.protocol.record.value.IncidentRecordValue;
+import io.camunda.zeebe.protocol.record.value.JobRecordValue;
+import io.camunda.zeebe.protocol.record.value.MessageRecordValue;
+import io.camunda.zeebe.protocol.record.value.MessageStartEventSubscriptionRecordValue;
+import io.camunda.zeebe.protocol.record.value.ProcessInstanceRecordValue;
+import io.camunda.zeebe.protocol.record.value.ProcessMessageSubscriptionRecordValue;
+import io.camunda.zeebe.protocol.record.value.SignalRecordValue;
+import io.camunda.zeebe.protocol.record.value.SignalSubscriptionRecordValue;
+import io.camunda.zeebe.protocol.record.value.TimerRecordValue;
+import io.camunda.zeebe.protocol.record.value.VariableRecordValue;
 import io.camunda.zeebe.protocol.record.value.deployment.Process;
 import io.quarkiverse.camunda.runtime.devmode.store.BpmnModel;
 import io.quarkiverse.camunda.runtime.devmode.store.RecordStore;
@@ -62,7 +85,7 @@ public class JsonRPCService {
     }
 
     public Object userTaskAssign(long key, String assignee, String action, boolean allowOverride) {
-        getClient().newUserTaskAssignCommand(key)
+        getClient().newAssignUserTaskCommand(key)
                 .action(action)
                 .allowOverride(allowOverride)
                 .assignee(assignee).send().join();
@@ -70,13 +93,13 @@ public class JsonRPCService {
     }
 
     public Object userTaskUnassign(long key) {
-        getClient().newUserTaskUnassignCommand(key).send().join();
+        getClient().newUnassignUserTaskCommand(key).send().join();
         return Map.of("command", "userTaskUnassign", "userTaskKey", key);
     }
 
     public Object userTaskUpdate(long key, String action, List<String> candidateUsers, List<String> candidateGroups,
             String dueDate, String followUpDate) {
-        var tmp = getClient().newUserTaskUpdateCommand(key);
+        var tmp = getClient().newUpdateUserTaskCommand(key);
         if (action != null) {
             tmp = tmp.action(action);
         }
@@ -146,8 +169,8 @@ public class JsonRPCService {
                 .send().join();
     };
 
-    private ZeebeClient getClient() {
-        return Arc.container().instance(ZeebeClient.class).get();
+    private CamundaClient getClient() {
+        return Arc.container().instance(CamundaClient.class).get();
     }
 
     @NonBlocking

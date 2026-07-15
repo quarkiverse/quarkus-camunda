@@ -30,52 +30,6 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-devservices-port]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-devservices-port[`+++quarkus.camunda.devservices.port+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.devservices.port+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Optional fixed port the dev service will listen to.
-
-If not defined, the port will be chosen randomly.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEVSERVICES_PORT+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEVSERVICES_PORT+++`
-endif::add-copy-button-to-env-var[]
---
-|int
-|
-
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-devservices-rest-port]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-devservices-rest-port[`+++quarkus.camunda.devservices.rest-port+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.devservices.rest-port+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Optional fixed port the dev service rest service will listen to.
-
-If not defined, the port will be chosen randomly.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEVSERVICES_REST_PORT+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEVSERVICES_REST_PORT+++`
-endif::add-copy-button-to-env-var[]
---
-|int
-|
-
 a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-devservices-shared]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-devservices-shared[`+++quarkus.camunda.devservices.shared+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.camunda.devservices.shared+++[]
@@ -84,9 +38,9 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Indicates if the Zeebe server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Zeebe starts a new container.
+Indicates if the Camunda server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Camunda starts a new container.
 
-The discovery uses the `quarkus-dev-service-zeebe` label. The value is configured using the `service-name` property.
+The discovery uses the `quarkus-dev-service-camunda` label. The value is configured using the `service-name` property.
 
 Container sharing is only used in dev mode.
 
@@ -109,7 +63,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-The value of the `quarkus-dev-service-zeebe` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Zeebe looks for a container with the `quarkus-dev-service-zeebe` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-zeebe` label set to the specified value.
+The value of the `quarkus-dev-service-zeebe` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Camunda looks for a container with the `quarkus-dev-service-camunda` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-zeebe` label set to the specified value.
 
 This property is used when you need multiple shared Zeebe servers.
 
@@ -165,92 +119,6 @@ endif::add-copy-button-to-env-var[]
 --
 |boolean
 |`+++false+++`
-
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-devservices-test-receiver-port]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-devservices-test-receiver-port[`+++quarkus.camunda.devservices.test.receiver-port+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.devservices.test.receiver-port+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Optional fixed debug export receiver port the dev service will listen to.
-
-If not defined, the port will be chosen randomly.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEVSERVICES_TEST_RECEIVER_PORT+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEVSERVICES_TEST_RECEIVER_PORT+++`
-endif::add-copy-button-to-env-var[]
---
-|int
-|
-
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-devservices-test-exporter]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-devservices-test-exporter[`+++quarkus.camunda.devservices.test.exporter+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.devservices.test.exporter+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Disable or enable debug exporter for the test.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEVSERVICES_TEST_EXPORTER+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEVSERVICES_TEST_EXPORTER+++`
-endif::add-copy-button-to-env-var[]
---
-|boolean
-|`+++true+++`
-
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-devservices-dev-exporter-enabled]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-devservices-dev-exporter-enabled[`+++quarkus.camunda.devservices.dev-exporter.enabled+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.devservices.dev-exporter.enabled+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Enable or disable debug exporter.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEVSERVICES_DEV_EXPORTER_ENABLED+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEVSERVICES_DEV_EXPORTER_ENABLED+++`
-endif::add-copy-button-to-env-var[]
---
-|boolean
-|`+++true+++`
-
-a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-dev-mode-dev-ui-enabled]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-dev-mode-dev-ui-enabled[`+++quarkus.camunda.dev-mode.dev-ui.enabled+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.dev-mode.dev-ui.enabled+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Disable or enabled zeebe dashboard dev-ui.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_DEV_MODE_DEV_UI_ENABLED+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_DEV_MODE_DEV_UI_ENABLED+++`
-endif::add-copy-button-to-env-var[]
---
-|boolean
-|`+++true+++`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-camunda_quarkus-camunda-dev-mode-watch-bpmn-files]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-dev-mode-watch-bpmn-files[`+++quarkus.camunda.dev-mode.watch-bpmn-files+++`]##
 ifdef::add-copy-button-to-config-props[]
@@ -428,7 +296,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Camunda gateway address. Default: localhost:26500
+Camunda gateway address. Default: http://localhost:26500
 
 
 ifdef::add-copy-button-to-env-var[]
@@ -438,8 +306,8 @@ ifndef::add-copy-button-to-env-var[]
 Environment variable: `+++QUARKUS_CAMUNDA_CLIENT_BROKER_GATEWAY_ADDRESS+++`
 endif::add-copy-button-to-env-var[]
 --
-|string
-|`+++localhost:26500+++`
+|link:https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html[URI]
+|`+++http://localhost:26500+++`
 
 a| [[quarkus-camunda_quarkus-camunda-client-broker-rest-address]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-broker-rest-address[`+++quarkus.camunda.client.broker.rest-address+++`]##
 ifdef::add-copy-button-to-config-props[]
@@ -449,7 +317,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Camunda gateway rest address. Default: localhost:8080
+Camunda gateway rest address. Default: http://localhost:8080
 
 
 ifdef::add-copy-button-to-env-var[]
@@ -460,7 +328,7 @@ Environment variable: `+++QUARKUS_CAMUNDA_CLIENT_BROKER_REST_ADDRESS+++`
 endif::add-copy-button-to-env-var[]
 --
 |link:https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html[URI]
-|`+++http://0.0.0.0:8080+++`
+|`+++http://localhost:8080+++`
 
 a| [[quarkus-camunda_quarkus-camunda-client-broker-keep-alive]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-broker-keep-alive[`+++quarkus.camunda.client.broker.keep-alive+++`]##
 ifdef::add-copy-button-to-config-props[]
@@ -482,6 +350,27 @@ endif::add-copy-button-to-env-var[]
 --
 |link:https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html[Duration] link:#duration-note-anchor-quarkus-camunda_quarkus-camunda[icon:question-circle[title=More information about the Duration format]]
 |`+++PT45S+++`
+
+a| [[quarkus-camunda_quarkus-camunda-client-broker-use-grpc]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-broker-use-grpc[`+++quarkus.camunda.client.broker.use-grpc+++`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.camunda.client.broker.use-grpc+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Use GRPC instead of REST for communication with camunda.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_CLIENT_BROKER_USE_GRPC+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_CAMUNDA_CLIENT_BROKER_USE_GRPC+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`+++false+++`
 
 a| [[quarkus-camunda_quarkus-camunda-client-cloud-cluster-id]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-cloud-cluster-id[`+++quarkus.camunda.client.cloud.cluster-id+++`]##
 ifdef::add-copy-button-to-config-props[]
@@ -966,27 +855,6 @@ endif::add-copy-button-to-env-var[]
 |link:https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html[Duration] link:#duration-note-anchor-quarkus-camunda_quarkus-camunda[icon:question-circle[title=More information about the Duration format]]
 |`+++PT1H+++`
 
-a| [[quarkus-camunda_quarkus-camunda-client-security-plaintext]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-security-plaintext[`+++quarkus.camunda.client.security.plaintext+++`]##
-ifdef::add-copy-button-to-config-props[]
-config_property_copy_button:+++quarkus.camunda.client.security.plaintext+++[]
-endif::add-copy-button-to-config-props[]
-
-
-[.description]
---
-Client security plaintext flag.
-
-
-ifdef::add-copy-button-to-env-var[]
-Environment variable: env_var_with_copy_button:+++QUARKUS_CAMUNDA_CLIENT_SECURITY_PLAINTEXT+++[]
-endif::add-copy-button-to-env-var[]
-ifndef::add-copy-button-to-env-var[]
-Environment variable: `+++QUARKUS_CAMUNDA_CLIENT_SECURITY_PLAINTEXT+++`
-endif::add-copy-button-to-env-var[]
---
-|boolean
-|`+++true+++`
-
 a| [[quarkus-camunda_quarkus-camunda-client-security-cert-path]] [.property-path]##link:#quarkus-camunda_quarkus-camunda-client-security-cert-path[`+++quarkus.camunda.client.security.cert-path+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.camunda.client.security.cert-path+++[]
@@ -1331,7 +1199,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Zeebe client is active
+Camunda client is active
 
 
 ifdef::add-copy-button-to-env-var[]

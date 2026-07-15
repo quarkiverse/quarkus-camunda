@@ -8,7 +8,7 @@ import java.util.Map;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import io.camunda.zeebe.client.api.JsonMapper;
+import io.camunda.client.api.JsonMapper;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 import io.grpc.CallOptions;
 import io.grpc.Channel;
@@ -82,45 +82,6 @@ public class OpenTelemetryClientInterceptor implements ClientInterceptor {
     }
 
     private static ForwardingClient.AttributeCallback callback(Span span) {
-        return new OpenTelemetryAttributeCallback(span);
-    }
-
-    private static final class OpenTelemetryAttributeCallback implements ForwardingClient.AttributeCallback {
-
-        private final Span span;
-
-        OpenTelemetryAttributeCallback(Span span) {
-            this.span = span;
-        }
-
-        @Override
-        public ForwardingClient.AttributeCallback setError() {
-            this.span.setStatus(StatusCode.ERROR);
-            return this;
-        }
-
-        @Override
-        public ForwardingClient.AttributeCallback setAttribute(String key, String value) {
-            this.span.setAttribute(key, value);
-            return this;
-        }
-
-        @Override
-        public ForwardingClient.AttributeCallback setAttribute(String key, int value) {
-            this.span.setAttribute(key, value);
-            return this;
-        }
-
-        @Override
-        public ForwardingClient.AttributeCallback setAttribute(String key, long value) {
-            this.span.setAttribute(key, value);
-            return this;
-        }
-
-        @Override
-        public ForwardingClient.AttributeCallback setAttribute(String key, boolean value) {
-            this.span.setAttribute(key, value);
-            return this;
-        }
+        return new SpanAttributeCallback(span);
     }
 }

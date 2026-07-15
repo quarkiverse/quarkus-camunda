@@ -1,15 +1,11 @@
 package io.quarkiverse.camunda.it.docker.sayhello;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
-import io.camunda.zeebe.process.test.assertions.BpmnAssert;
-import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
+import io.camunda.process.test.api.CamundaAssert;
 import io.quarkiverse.camunda.it.docker.AbstractTest;
 import io.quarkiverse.camunda.test.InjectCamundaClient;
 import io.quarkus.test.junit.QuarkusTest;
@@ -19,7 +15,7 @@ import io.quarkus.test.junit.QuarkusTest;
 public class SayHelloTest extends AbstractTest {
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     @Test
     @DisplayName("Start process")
@@ -36,10 +32,9 @@ public class SayHelloTest extends AbstractTest {
                 .variables(p)
                 .send().join();
 
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
-        a.hasVariableWithValue("name", "name-input");
-        a.hasVariableWithValue("message", "Hello name-input");
+        CamundaAssert.assertThat(event).isCompleted()
+                .hasVariable("name", "name-input")
+                .hasVariable("message", "Hello name-input");
     }
 
 }

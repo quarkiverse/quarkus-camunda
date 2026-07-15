@@ -9,20 +9,20 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.command.ClientStatusException;
-import io.camunda.zeebe.client.api.response.BrokerInfo;
-import io.camunda.zeebe.client.api.response.Topology;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.command.ClientStatusException;
+import io.camunda.client.api.response.BrokerInfo;
+import io.camunda.client.api.response.Topology;
 
 @Readiness
 public class HealthCheck implements org.eclipse.microprofile.health.HealthCheck {
 
     @Inject
-    ZeebeClient client;
+    CamundaClient client;
 
     @Override
     public HealthCheckResponse call() {
-        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Zeebe health check");
+        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Camunda health check");
         try {
             Topology topology = client.newTopologyRequest().send().join();
             List<BrokerInfo> brokers = topology.getBrokers();

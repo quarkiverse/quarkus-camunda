@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 
 @Path("test")
 public class TestRestController {
@@ -19,7 +19,7 @@ public class TestRestController {
     private static Logger log = LoggerFactory.getLogger(TestRestController.class);
 
     @Inject
-    ZeebeClient client;
+    CamundaClient client;
 
     @Inject
     JobCounter jobCounter;

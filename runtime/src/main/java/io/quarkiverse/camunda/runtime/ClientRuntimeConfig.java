@@ -4,7 +4,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.*;
 
-import io.camunda.zeebe.client.api.command.CommandWithTenantStep;
+import io.camunda.client.api.command.CommandWithTenantStep;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
@@ -114,18 +114,18 @@ public interface ClientRuntimeConfig {
 
         /**
          * Camunda gateway address.
-         * Default: localhost:26500
+         * Default: http://localhost:26500
          */
         @WithName("gateway-address")
-        @WithDefault("localhost:26500")
-        String gatewayAddress();
+        @WithDefault("http://localhost:26500")
+        URI gatewayAddress();
 
         /**
          * Camunda gateway rest address.
-         * Default: localhost:8080
+         * Default: http://localhost:8080
          */
         @WithName("rest-address")
-        @WithDefault("http://0.0.0.0:8080")
+        @WithDefault("http://localhost:8080")
         URI restAddress();
 
         /**
@@ -134,6 +134,13 @@ public interface ClientRuntimeConfig {
         @WithName("keep-alive")
         @WithDefault("PT45S")
         Duration keepAlive();
+
+        /**
+         * Use GRPC instead of REST for communication with camunda.
+         */
+        @WithName("use-grpc")
+        @WithDefault("false")
+        Boolean useGRPC();
     }
 
     /**
@@ -214,13 +221,6 @@ public interface ClientRuntimeConfig {
     interface SecurityConfig {
 
         /**
-         * Client security plaintext flag.
-         */
-        @WithName("plaintext")
-        @WithDefault("true")
-        boolean plaintext();
-
-        /**
          * Specify a path to a certificate with which to validate gateway requests.
          */
         @WithName("cert-path")
@@ -295,7 +295,7 @@ public interface ClientRuntimeConfig {
          * and retried there if need be.
          * Sets the backoff multiplication factor. The previous delay is multiplied by this factor. Default is 1.6.
          *
-         * @see io.camunda.zeebe.client.impl.worker.ExponentialBackoffBuilderImpl
+         * @see io.camunda.client.impl.worker.ExponentialBackoffBuilderImpl
          */
         @WithName("exp-backoff-factor")
         @WithDefault("1.6")
@@ -306,7 +306,7 @@ public interface ClientRuntimeConfig {
          * For example, if the next delay is calculated to be 1s and the jitterFactor is 0.1 then the actual next
          * delay can be somewhere between 0.9 and 1.1s. Default is 0.1
          *
-         * @see io.camunda.zeebe.client.impl.worker.ExponentialBackoffBuilderImpl
+         * @see io.camunda.client.impl.worker.ExponentialBackoffBuilderImpl
          */
         @WithName("exp-jitter-factor")
         @WithDefault("0.1")
@@ -316,7 +316,7 @@ public interface ClientRuntimeConfig {
          * Sets the maximum retry delay.
          * Note that the jitter may push the retry delay over this maximum. Default is 5000ms.
          *
-         * @see io.camunda.zeebe.client.impl.worker.ExponentialBackoffBuilderImpl
+         * @see io.camunda.client.impl.worker.ExponentialBackoffBuilderImpl
          */
         @WithName("exp-max-delay")
         @WithDefault("5000")
@@ -326,7 +326,7 @@ public interface ClientRuntimeConfig {
          * Sets the minimum retry delay.
          * Note that the jitter may push the retry delay below this minimum. Default is 50ms.
          *
-         * @see io.camunda.zeebe.client.impl.worker.ExponentialBackoffBuilderImpl
+         * @see io.camunda.client.impl.worker.ExponentialBackoffBuilderImpl
          */
         @WithName("exp-min-delay")
         @WithDefault("50")

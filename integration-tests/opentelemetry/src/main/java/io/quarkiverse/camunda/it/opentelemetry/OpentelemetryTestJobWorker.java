@@ -3,7 +3,7 @@ package io.quarkiverse.camunda.it.opentelemetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.camunda.zeebe.client.api.response.ActivatedJob;
+import io.camunda.client.api.response.ActivatedJob;
 import io.quarkiverse.camunda.JobWorker;
 import io.quarkiverse.camunda.Variable;
 import io.quarkiverse.camunda.VariablesAsType;

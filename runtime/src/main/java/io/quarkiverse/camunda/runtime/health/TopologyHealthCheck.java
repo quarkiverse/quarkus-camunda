@@ -7,19 +7,19 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Liveness;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.command.ClientStatusException;
-import io.camunda.zeebe.client.api.response.Topology;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.command.ClientStatusException;
+import io.camunda.client.api.response.Topology;
 
 @Liveness
 public class TopologyHealthCheck implements HealthCheck {
 
     @Inject
-    ZeebeClient client;
+    CamundaClient client;
 
     @Override
     public HealthCheckResponse call() {
-        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Zeebe topology health check");
+        HealthCheckResponseBuilder builder = HealthCheckResponse.named("Camunda topology health check");
         try {
             Topology topology = client.newTopologyRequest().send().join();
             if (topology.getClusterSize() > 0) {

@@ -21,10 +21,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
-import io.camunda.zeebe.process.test.assertions.BpmnAssert;
-import io.camunda.zeebe.process.test.assertions.ProcessInstanceAssert;
+import io.camunda.client.CamundaClient;
+import io.camunda.client.api.response.ProcessInstanceEvent;
+import io.camunda.process.test.api.CamundaAssert;
 import io.quarkiverse.camunda.test.CamundaTestResource;
 import io.quarkiverse.camunda.test.InjectCamundaClient;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -47,11 +46,11 @@ public class OpentelemetryTest {
     private final static String BPM_PROCESS_ID = "test";
 
     @InjectCamundaClient
-    ZeebeClient client;
+    CamundaClient client;
 
     @Test
     @DisplayName("Test open telemetry")
-    public void testOpenTelemetry() throws JsonProcessingException {
+    public void testOpenTelemetry() {
 
         Parameter param = new Parameter();
         param.message = "message-example";
@@ -65,24 +64,15 @@ public class OpentelemetryTest {
                 .send().join();
 
         Assertions.assertEquals(BPM_PROCESS_ID, event.getBpmnProcessId());
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(event).isCompleted();
 
-        await().atMost(7, SECONDS).until(() -> !jaegerTrace().getList("data").isEmpty());
-
-        JsonPath response = jaegerTrace();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        JaegerResponse jr = objectMapper.readValue(response.prettify(), JaegerResponse.class);
-        Assertions.assertNotNull(jr);
-        Assertions.assertNotNull(jr.data);
-
+        // the job-worker span and the "CompleteJobRequest" client span it triggers are exported
+        // asynchronously and independently, so wait until both have arrived instead of just any data
         Map<String, JaegerSpan> spans = new HashMap<>();
-        jr.data.forEach(x -> {
-            x.spans.forEach(y -> {
-                spans.put(y.operationName, y);
-            });
+        await().atMost(7, SECONDS).until(() -> {
+            spans.clear();
+            spans.putAll(collectSpans(jaegerTrace()));
+            return spans.containsKey("openTelemetryTestMethod") && spans.containsKey("CompleteJobRequest");
         });
 
         JaegerSpan testMethod = spans.get("openTelemetryTestMethod");
@@ -111,6 +101,22 @@ public class OpentelemetryTest {
     private void assertTag(Map<String, JaegerTag> tags, String name, Object value) {
         Assertions.assertNotNull(tags.get(name));
         Assertions.assertEquals(value, tags.get(name).value);
+    }
+
+    private Map<String, JaegerSpan> collectSpans(JsonPath response) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        JaegerResponse jr;
+        try {
+            jr = objectMapper.readValue(response.prettify(), JaegerResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, JaegerSpan> spans = new HashMap<>();
+        jr.data.forEach(x -> x.spans.forEach(y -> spans.put(y.operationName, y)));
+        return spans;
     }
 
     private JsonPath jaegerTrace() {

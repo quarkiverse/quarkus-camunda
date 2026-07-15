@@ -3,10 +3,10 @@ package io.quarkiverse.camunda.runtime.noop;
 import java.io.InputStream;
 import java.util.Map;
 
-import io.camunda.zeebe.client.api.command.EvaluateDecisionCommandStep1;
-import io.camunda.zeebe.client.api.response.EvaluateDecisionResponse;
-import io.camunda.zeebe.client.impl.ZeebeObjectMapper;
-import io.camunda.zeebe.client.impl.response.EvaluateDecisionResponseImpl;
+import io.camunda.client.api.command.EvaluateDecisionCommandStep1;
+import io.camunda.client.api.response.EvaluateDecisionResponse;
+import io.camunda.client.impl.CamundaObjectMapper;
+import io.camunda.client.impl.response.EvaluateDecisionResponseImpl;
 import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
 
 public class EvaluateDecisionCommandStep1Impl extends AbstractStep<EvaluateDecisionResponse>
@@ -53,7 +53,17 @@ public class EvaluateDecisionCommandStep1Impl extends AbstractStep<EvaluateDecis
 
     @Override
     protected EvaluateDecisionResponse create() {
-        return new EvaluateDecisionResponseImpl(new ZeebeObjectMapper(),
+        return new EvaluateDecisionResponseImpl(new CamundaObjectMapper(),
                 GatewayOuterClass.EvaluateDecisionResponse.getDefaultInstance());
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep1 useRest() {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep1 useGrpc() {
+        return this;
     }
 }
