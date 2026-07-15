@@ -1,1 +1,1 @@
-* xref:index.adoc[Quarkus Zeebe]
+* xref:index.adoc[Quarkus Camunda]

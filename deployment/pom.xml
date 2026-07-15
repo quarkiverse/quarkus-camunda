@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>io.quarkiverse.zeebe</groupId>
-        <artifactId>quarkus-zeebe-parent</artifactId>
+        <groupId>io.quarkiverse.camunda</groupId>
+        <artifactId>quarkus-camunda-parent</artifactId>
         <version>999-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>quarkus-zeebe-deployment</artifactId>
-    <name>Quarkus - Zeebe - Deployment</name>
+    <artifactId>quarkus-camunda-deployment</artifactId>
+    <name>Quarkus - Camunda - Deployment</name>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -18,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-vertx-http-dev-ui-spi</artifactId>
+            <artifactId>quarkus-devui-deployment-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -41,17 +42,17 @@
             <artifactId>quarkus-devservices-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkiverse.zeebe</groupId>
-            <artifactId>quarkus-zeebe</artifactId>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-devservices-deployment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.camunda</groupId>
+            <artifactId>quarkus-camunda</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.zeebe</groupId>
-            <artifactId>zeebe-test-container</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5-internal</artifactId>
+            <artifactId>quarkus-junit-internal</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -72,6 +73,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

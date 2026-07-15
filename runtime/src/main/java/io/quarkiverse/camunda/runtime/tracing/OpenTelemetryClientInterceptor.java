@@ -1,0 +1,87 @@
+package io.quarkiverse.camunda.runtime.tracing;
+
+import static io.quarkiverse.camunda.runtime.tracing.Tracing.CLIENT_EXCEPTION;
+import static io.quarkus.opentelemetry.runtime.config.build.OTelBuildConfig.INSTRUMENTATION_NAME;
+
+import java.util.Map;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import io.camunda.client.api.JsonMapper;
+import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.ClientCall;
+import io.grpc.MethodDescriptor;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.context.propagation.TextMapPropagator;
+import io.quarkiverse.camunda.ClientInterceptor;
+
+@ApplicationScoped
+public class OpenTelemetryClientInterceptor implements ClientInterceptor {
+
+    private final OpenTelemetry openTelemetry;
+
+    @Inject
+    JsonMapper mapper;
+
+    public OpenTelemetryClientInterceptor(OpenTelemetry openTelemetry) {
+        this.openTelemetry = openTelemetry;
+    }
+
+    @Override
+    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions,
+            Channel next) {
+
+        Span span = Span.current();
+        // ignore if span is not activate
+        if (span == null) {
+            return next.newCall(method, callOptions);
+        }
+
+        return new ForwardingClient<ReqT, RespT>(next.newCall(method, callOptions)) {
+
+            @Override
+            protected void createTracingMessage(ReqT message) {
+                // create new span for the request
+                Span callSpan = openTelemetry.getTracer(INSTRUMENTATION_NAME)
+                        .spanBuilder(message.getClass().getSimpleName())
+                        .setSpanKind(SpanKind.CLIENT).startSpan();
+                try (Scope ignored = callSpan.makeCurrent()) {
+                    sendTracingMessage(message, callback(span), callback(callSpan));
+                } catch (Throwable t) {
+                    callSpan.setStatus(StatusCode.ERROR).setAttribute(CLIENT_EXCEPTION, t.getMessage());
+                    throw t;
+                } finally {
+                    callSpan.end();
+                }
+            }
+
+            @Override
+            protected GatewayOuterClass.CreateProcessInstanceRequest convert(
+                    GatewayOuterClass.CreateProcessInstanceRequest request) {
+                GatewayOuterClass.CreateProcessInstanceRequest.Builder builder = GatewayOuterClass.CreateProcessInstanceRequest
+                        .newBuilder(request);
+
+                Map<String, Object> variables = mapper.fromJsonAsMap(request.getVariables());
+                ContextPropagators propagators = openTelemetry.getPropagators();
+                TextMapPropagator textMapPropagator = propagators.getTextMapPropagator();
+
+                textMapPropagator.inject(Context.current(), variables, Map::put);
+                builder.setVariables(mapper.toJson(variables));
+                return builder.build();
+            }
+        };
+    }
+
+    private static ForwardingClient.AttributeCallback callback(Span span) {
+        return new SpanAttributeCallback(span);
+    }
+}

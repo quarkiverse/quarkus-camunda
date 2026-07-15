@@ -1,32 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>io.quarkiverse.zeebe</groupId>
-        <artifactId>quarkus-zeebe-parent</artifactId>
+        <groupId>io.quarkiverse.camunda</groupId>
+        <artifactId>quarkus-camunda-parent</artifactId>
         <version>999-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>quarkus-zeebe-integration-tests</artifactId>
-    <name>Quarkus - Zeebe - Integration Tests</name>
-    <description>Quarkus Zeebe integration tests</description>
+    <artifactId>quarkus-camunda-integration-tests</artifactId>
+    <name>Quarkus - Camunda - Integration Tests</name>
+    <description>Quarkus Camunda integration tests</description>
     <packaging>pom</packaging>
 
     <modules>
         <module>bpmn</module>
         <module>docker</module>
         <module>opentelemetry</module>
-        <module>embedded</module>
         <module>panache</module>
         <module>noop</module>
     </modules>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <!--suppress UnresolvedMavenProperty -->
-        <quarkus.build.skip>${skipTests}</quarkus.build.skip>
-        <!--suppress UnresolvedMavenProperty -->
-        <native.surefire.skip>${skipTests}</native.surefire.skip>
+        <skipITs>true</skipITs>
     </properties>
 
     <build>
@@ -34,7 +29,7 @@
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${quarkus.version}</version>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
                         <goals>
@@ -44,13 +39,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>${native.surefire.skip}</skipTests>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
@@ -58,31 +46,39 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <native.image.path>
-                                    ${project.build.directory}/${project.build.finalName}-runner
-                                </native.image.path>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager
-                                </java.util.logging.manager>
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <maven.home>${maven.home}</maven.home>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>native</id>
+            <id>native-image</id>
             <activation>
                 <property>
                     <name>native</name>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>${native.surefire.skip}</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
             <properties>
+                <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
                 <skipITs>false</skipITs>
                 <quarkus.native.enabled>true</quarkus.native.enabled>
             </properties>

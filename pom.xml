@@ -6,9 +6,9 @@
     <artifactId>quarkiverse-parent</artifactId>
     <version>22</version>
   </parent>
-  <groupId>io.quarkiverse.zeebe</groupId>
-  <artifactId>quarkus-zeebe-parent</artifactId>
-  <name>Quarkus - Zeebe - Parent</name>
+  <groupId>io.quarkiverse.camunda</groupId>
+  <artifactId>quarkus-camunda-parent</artifactId>
+  <name>Quarkus - Camunda - Parent</name>
   <version>999-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
@@ -23,9 +23,9 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <quarkus.version>3.20.5</quarkus.version>
-    <zeebe.version>8.5.15</zeebe.version>
-    <zeebe.testcontainers.version>3.6.5</zeebe.testcontainers.version>
+    <quarkus.version>3.37.2</quarkus.version>
+    <camunda.version>8.9.12</camunda.version>
+    <zeebe.testcontainers.version>3.6.9</zeebe.testcontainers.version>
     <quarkus-mockserver.version>1.17.0</quarkus-mockserver.version>
   </properties>
   <dependencyManagement>
@@ -39,33 +39,18 @@
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
-        <artifactId>zeebe-client-java</artifactId>
-        <version>${zeebe.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.zeebe</groupId>
-        <artifactId>zeebe-test-container</artifactId>
-        <version>${zeebe.testcontainers.version}</version>
+        <artifactId>camunda-client-java</artifactId>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
-        <artifactId>zeebe-process-test-api</artifactId>
-        <version>${zeebe.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.camunda</groupId>
-        <artifactId>zeebe-process-test-assertions</artifactId>
-        <version>${zeebe.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.camunda</groupId>
-        <artifactId>zeebe-process-test-engine</artifactId>
-        <version>${zeebe.version}</version>
+        <artifactId>camunda-process-test-java</artifactId>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
         <artifactId>zeebe-protocol-jackson</artifactId>
-        <version>${zeebe.version}</version>
+        <version>${camunda.version}</version>
       </dependency>
       <dependency>
         <groupId>io.quarkiverse.mockserver</groupId>
@@ -86,6 +71,7 @@
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-maven-plugin</artifactId>
           <version>${quarkus.version}</version>
+          <extensions>true</extensions>
         </plugin>
         <plugin>
           <groupId>io.quarkus</groupId>

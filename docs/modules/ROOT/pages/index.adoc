@@ -1,34 +1,25 @@
-= Quarkus Zeebe
+= Quarkus Camunda
 
 include::./includes/attributes.adoc[]
 
-Quarkus https://docs.camunda.io/docs/components/zeebe/zeebe-overview/[Zeebe] extension. Zeebe's cloud-native design provides the performance, resilience, and security enterprises need to future-proof their process orchestration efforts.
+Quarkus https://docs.camunda.io/docs/components/zeebe/zeebe-overview/[Camunda] extension. Camunda's cloud-native design provides the performance, resilience, and security enterprises need to future-proof their process orchestration efforts.
 
 == Installation
 
-If you want to use this extension, you need to add the `io.quarkiverse.zeebe:quarkus-zeebe` extension first to your build file.
+If you want to use this extension, you need to add the `io.quarkiverse.camunda:quarkus-camunda` extension first to your build file.
 
 For instance, with Maven, add the following dependency to your POM file:
 
 [source,xml,subs=attributes+]
 ----
 <dependency>
-    <groupId>io.quarkiverse.zeebe</groupId>
-    <artifactId>quarkus-zeebe</artifactId>
+    <groupId>io.quarkiverse.camunda</groupId>
+    <artifactId>quarkus-camunda</artifactId>
     <version>{project-version}</version>
 </dependency>
 ----
 
-=== Upgrade
-
-[quote]
-In version `>=0.8.0` we replaced `@ZeebeWorker` with `@JobWorker` annotation.
-
-[quote]
-In version `>=0.7.0` we removed the hazelcast dependency and https://github.com/camunda-community-hub/zeebe-simple-monitor[zeebe-simple-monitor]
-for test and dev services. Now we do use https://github.com/camunda-community-hub/zeebe-test-container[zeebe-test-container] with https://github.com/camunda-community-hub/zeebe-test-container#debug-exporter[debug exporter]
-and https://github.com/lorislab/zeebe-dev-monitor[zeebe-dev-monitor]. In test module we remove our assert API and switch to Camunda https://github.com/camunda/zeebe-process-test/blob/main/assertions/src/main/java/io/camunda/zeebe/process/test/assertions/BpmnAssert.java[BpmnAssert]
-from https://github.com/camunda/zeebe-process-test[zeebe-process-test]. Test api migration: `io.quarkiverse.zeebe.test.BpmnAssert` -> `io.camunda.zeebe.process.test.assertions.BpmnAssert`
+include::./includes/migration-guide.adoc[]
 
 == Configuration
 
@@ -45,34 +36,34 @@ You can see some exemplary configurations for each of the setups below. Please n
 [source,properties]
 ----
 # enable auto load bpmn resources
-quarkus.zeebe.resources.enabled=true
+quarkus.camunda.resources.enabled=true
 # src/main/resources/bpmn
-quarkus.zeebe.resources.location=bpmn
-# Enable zeebe Dev Service:
-quarkus.zeebe.devservices.enabled=true
+quarkus.camunda.resources.location=bpmn
+# Enable camunda Dev Service:
+quarkus.camunda.devservices.enabled=true
 # only start devservices, if no running docker container is found
-quarkus.zeebe.devservices.shared=true
-# zeebe service name
-quarkus.zeebe.devservices.service-name=zeebe_broker
-# enable reusable zeebe test-container (https://www.testcontainers.org/features/reuse/)
-quarkus.zeebe.devservices.reuse=false
+quarkus.camunda.devservices.shared=true
+# camunda service name
+quarkus.camunda.devservices.service-name=camunda_broker
+# enable reusable camunda test-container (https://www.testcontainers.org/features/reuse/)
+quarkus.camunda.devservices.reuse=false
 # enable hot restart for bpmn subdirectories changes
-quarkus.zeebe.dev-mode.watch-bpmn-dir=true
+quarkus.camunda.dev-mode.watch-bpmn-dir=true
 # enable hot restart for bpmn files changes
-quarkus.zeebe.dev-mode.watch-bpmn-files=true
+quarkus.camunda.dev-mode.watch-bpmn-files=true
 # enable hot restart for job worker changes
-quarkus.zeebe.dev-mode.watch-job-worker=true
+quarkus.camunda.dev-mode.watch-job-worker=true
 ----
 
 ==== Shared local dev instance
 
 [source,properties]
 ----
-quarkus.zeebe.client.broker.gateway-address=localhost:26500
+quarkus.camunda.client.broker.gateway-address=http://localhost:26500
 # If you are sure that there is already an instance running, yu can directly deactivate it
-quarkus.zeebe.devservices.enabled=false
-quarkus.zeebe.devservices.shared=true
-quarkus.zeebe.devservices.serviceName=zeebe_broker
+quarkus.camunda.devservices.enabled=false
+quarkus.camunda.devservices.shared=true
+quarkus.camunda.devservices.serviceName=camunda_broker
 ----
 
 ==== Direct interaction with Camunda Cloud live instance
@@ -81,33 +72,33 @@ Preferably you would be using a dev instance of Camunda and not your production 
 [source,properties]
 ----
 # Disable local dev services
-quarkus.zeebe.devservices.enabled=false
+quarkus.camunda.devservices.enabled=false
 
-# Enter your cloud credentials from the zeebe portal
-quarkus.zeebe.client.broker.gateway-address=
+# Enter your cloud credentials from the camunda portal
+quarkus.camunda.client.broker.gateway-address=
 # Specify a cluster id.
-quarkus.zeebe.client.cloud.cluster-id=
+quarkus.camunda.client.cloud.cluster-id=
 # Specify a client id.
-quarkus.zeebe.client.cloud.client-id=
+quarkus.camunda.client.cloud.client-id=
 # Specify a client secret to request an access token.
-quarkus.zeebe.client.cloud.client-secret=
+quarkus.camunda.client.cloud.client-secret=
 # Specify a cloud region.
-quarkus.zeebe.client.cloud.region=
-quarkus.zeebe.client.cloud.base-url=zeebe.camunda.io
-quarkus.zeebe.client.cloud.auth-url=https://login.cloud.camunda.io/oauth/token
-quarkus.zeebe.client.cloud.port=443
+quarkus.camunda.client.cloud.region=
+quarkus.camunda.client.cloud.base-url=zeebe.camunda.io
+quarkus.camunda.client.cloud.auth-url=https://login.cloud.camunda.io/oauth/token
+quarkus.camunda.client.cloud.port=443
 
 # Make sure you are disabling plaintext security, otherwise connection will fail
-quarkus.zeebe.client.security.plaintext=false
+quarkus.camunda.client.security.plaintext=false
 ----
 
 === Metrics
-Whether `zeebe` metrics is enabled or not is done by `quarkus.zeebe.metrics.enabled` build time property.
+Whether `camunda` metrics is enabled or not is done by `quarkus.camunda.metrics.enabled` build time property.
 The default is `true`, but shown here to indicate how it can be disabled.
 
 [source,properties]
 ----
-quarkus.zeebe.metrics.enabled=true
+quarkus.camunda.metrics.enabled=true
 ----
 
 You can access the following metrics:
@@ -116,7 +107,7 @@ You can access the following metrics:
 * `activated`: The job was activated and started to process an item
 * `completed`: The processing was completed successfully
 * `failed`: The processing failed with some exception
-* `bpmn-error`: The processing completed by throwing an ZeebeBpmnError (which means there was no technical problem)
+* `bpmn-error`: The processing completed by throwing an BpmnError (which means there was no technical problem)
 
 Example:
 [source]
@@ -142,10 +133,10 @@ https://quarkus.io/guides/telemetry-micrometer-tutorial[Quarkus Micrometer]
 
 === Tracing
 
-Whether `zeebe` tracing is enabled or not is done by `quarkus.zeebe.tracing.enabled` build time property. The default is `true`, but shown here to indicate how it can be disabled.
+Whether `camunda` tracing is enabled or not is done by `quarkus.camunda.tracing.enabled` build time property. The default is `true`, but shown here to indicate how it can be disabled.
 [source,properties]
 ----
-quarkus.zeebe.tracing.enabled=true
+quarkus.camunda.tracing.enabled=true
 ----
 
 image::opentelemetry.png[OpenTelemetry]
@@ -161,34 +152,25 @@ If you already have your Quarkus project configured, you can add the `quarkus-op
 </dependency>
 ----
 
-* https://github.com/quarkiverse/quarkus-zeebe/tree/main/examples/opentelemetry[Zeebe OpenTelemetry Example]
+* https://github.com/quarkiverse/quarkus-zeebe/tree/main/examples/opentelemetry[Camunda OpenTelemetry Example]
 * https://quarkus.io/guides/opentelemetry[Quarkus OpenTelemetry]
 
 === Dev-Services
-Dev Services for Zeebe is automatically enabled unless:
-* `quarkus.zeebe.devservices.enabled` is set to false
-* `quarkus.zeebe.broker.gateway-address` is configured
+Dev Services for Camunda is automatically enabled unless:
 
-Dev Service for Zeebe relies on Docker to start the broker. If your environment does not support Docker, you will need
+* `quarkus.camunda.devservices.enabled` is set to `false`
+* `quarkus.camunda.broker.gateway-address` is configured
+* `quarkus.camunda.broker.rest-address` is configured
+
+Dev Service for Camunda relies on Docker to start the broker. If your environment does not support Docker, you will need
 to start the broker manually, or connect to an already running broker. You can configure the broker address using
-`quarkus.zeebe.broker.gateway-address`.
+`quarkus.camunda.broker.gateway-address` OR `quarkus.camunda.broker.rest-address` depending if you want to use grpc or rest.
 
-image::devservice.svg[DevService]
 
 To activate Dev Service use this configuration:
 [source,properties]
 ----
-quarkus.zeebe.devservices.enabled=true
-----
-
-=== Dev-UI
-
-image::devui.png[DevUI]
-
-The Zeebe Dev-UI is activated be default. You can disable it to by change this property:
-[source,properties]
-----
-quarkus.zeebe.dev-ui.enabled=true
+quarkus.camunda.devservices.enabled=true
 ----
 
 == Usage
@@ -214,7 +196,7 @@ public void test() {
 Or you can set a default job type:
 [source,properties]
 ----
-quarkus.zeebe.client.job.default-type=test
+quarkus.camunda.client.job.default-type=test
 ----
 
 === Variables
@@ -329,8 +311,8 @@ right after the method has finished.
 
 When using autoComplete you can:
 * Return a Map, String, InputStream, or Object, which then will be added to the process variables
-* Throw a `ZeebeBpmnError` which results in a BPMN error being sent to Zeebe
-* Throw any other Exception that leads in a failure handed over to Zeebe
+* Throw a `BpmnError` which results in a BPMN error being sent to Camunda
+* Throw any other Exception that leads in a failure handed over to Camunda
 
 [source,java]
 ----
@@ -340,7 +322,7 @@ public Map<String, Object> job1(final ActivatedJob job) {
     if (ok) {
        return responseMap;
     } else {
-       throw new ZeebeBpmnError("Error code", "Error message");
+       throw new BpmnError("Error code", "Error message");
     }
 }
 ----
@@ -376,8 +358,8 @@ Note that when completing jobs programmatically, you must specify `autoComplete 
 condition between your programmatic job completion and the Quarkus extension integration job completion, this can
 lead to unpredictable results.
 
-=== Throwing `ZeebeBpmnError`
-Whenever your code hits a problem that should lead to a https://docs.camunda.io/docs/reference/bpmn-processes/error-events/error-events/[BPMN error] being raised, you can simply throw a ZeebeBpmnError
+=== Throwing `BpmnError`
+Whenever your code hits a problem that should lead to a https://docs.camunda.io/docs/reference/bpmn-processes/error-events/error-events/[BPMN error] being raised, you can simply throw a BpmnError
 providing the error code used in BPMN:
 [source,java]
 ----
@@ -387,7 +369,7 @@ public Map<String, Object> job1(final ActivatedJob job) {
     if (ok) {
        return responseMap;
     } else {
-       throw new ZeebeBpmnError("Error code", "Error message");
+       throw new BpmnError("Error code", "Error message");
     }
 }
 ----
@@ -411,36 +393,35 @@ The return type `Uni<Void>` instructs the job worker to execute the method on th
 
 == Testing
 
-To use the test extension, add this dependency to the project:
+=== Camunda Process Test
+To use the Camunda test extension, add this dependency to the project:
 [source,xml]
 ----
 <dependency>
-    <groupId>io.quarkiverse.zeebe</groupId>
-    <artifactId>quarkus-zeebe-test</artifactId>
+    <groupId>io.quarkiverse.camunda</groupId>
+    <artifactId>quarkus-camunda-test</artifactId>
     <version>{version}</version>
     <scope>test</scope>
 </dependency>
 ----
-image::testing.svg[Test]
 
-To use the `ZeebeClient` and `BpmnAssert` in the tests use the `@QuarkusTestResource(ZeebeTestResource.class)` and enable this configuration:
-[source,properties]
-----
-quarkus.zeebe.devservices.enabled=true
-----
+This extension is setting up the Camunda Client for the test environment.
+
+To use the `CamundaClient` and `CamundaAssert` in the tests use the `@QuarkusTestResource(CamundaTestResource.class)`:
+
 Test example
 [source,java]
 ----
-import io.quarkiverse.zeebe.test.ZeebeTestResource;
+import io.quarkiverse.camunda.test.CamundaTestResource;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.client.CamundaClient;
 
 @QuarkusTest
-@QuarkusTestResource(ZeebeTestResource.class)
+@QuarkusTestResource(CamundaTestResource.class)
 public class BaseTest {
 
-    @InjectZeebeClient
-    ZeebeClient client;
+    @InjectCamundaClient
+    CamundaClient client;
 
     @Test
     public void startProcessTest() {
@@ -448,8 +429,7 @@ public class BaseTest {
                 .bpmnProcessId("test").latestVersion()
                 .variables(Map.of("k","v")).send().join();
 
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
+        CamundaAssert.assertThat(event).isCompleted();
     }
 }
 ----
@@ -463,39 +443,9 @@ public class BaseIT extends BaseTest {
 
 }
 ----
-For more information check examples in the `integration-tests` directory in this repo.
-
-### Testing with embedded engine
-
-[quote]
-The Zeebe process test embedded engine requires Java version >= 17
-
-[source,java]
-----
-import io.quarkiverse.zeebe.test.ZeebeTestEmbeddedResource;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.camunda.zeebe.client.ZeebeClient;
-
-@QuarkusTest
-@QuarkusTestResource(ZeebeTestEmbeddedResource.class)
-public class BaseTest {
-
-    @InjectZeebeClient
-    ZeebeClient client;
-
-    @Test
-    public void startProcessTest() {
-        ProcessInstanceEvent event = client.newCreateInstanceCommand()
-                .bpmnProcessId("test").latestVersion()
-                .variables(Map.of("k","v")).send().join();
-
-        ProcessInstanceAssert a = BpmnAssert.assertThat(event);
-        await().atMost(7, SECONDS).untilAsserted(a::isCompleted);
-    }
-}
-----
+For more information check examples in the `integration-tests` directory in this repo and the link:++https://docs.camunda.io/docs/apis-tools/testing/getting-started/[official documentation]++[official documentation] by Camunda.
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
 
-include::includes/quarkus-zeebe.adoc[leveloffset=+1, opts=optional]
+include::includes/quarkus-camunda.adoc[leveloffset=+1, opts=optional]

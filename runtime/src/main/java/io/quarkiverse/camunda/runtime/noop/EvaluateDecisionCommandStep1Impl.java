@@ -1,0 +1,69 @@
+package io.quarkiverse.camunda.runtime.noop;
+
+import java.io.InputStream;
+import java.util.Map;
+
+import io.camunda.client.api.command.EvaluateDecisionCommandStep1;
+import io.camunda.client.api.response.EvaluateDecisionResponse;
+import io.camunda.client.impl.CamundaObjectMapper;
+import io.camunda.client.impl.response.EvaluateDecisionResponseImpl;
+import io.camunda.zeebe.gateway.protocol.GatewayOuterClass;
+
+public class EvaluateDecisionCommandStep1Impl extends AbstractStep<EvaluateDecisionResponse>
+        implements EvaluateDecisionCommandStep1, EvaluateDecisionCommandStep1.EvaluateDecisionCommandStep2 {
+    @Override
+    public EvaluateDecisionCommandStep2 decisionId(String decisionId) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 decisionKey(long decisionKey) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 variables(InputStream variables) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 variables(String variables) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 variables(Map<String, Object> variables) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 variables(Object variables) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 variable(String key, Object value) {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep2 tenantId(String tenantId) {
+        return this;
+    }
+
+    @Override
+    protected EvaluateDecisionResponse create() {
+        return new EvaluateDecisionResponseImpl(new CamundaObjectMapper(),
+                GatewayOuterClass.EvaluateDecisionResponse.getDefaultInstance());
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep1 useRest() {
+        return this;
+    }
+
+    @Override
+    public EvaluateDecisionCommandStep1 useGrpc() {
+        return this;
+    }
+}

@@ -1,4 +1,4 @@
-# Quarkus Zeebe
+# Quarkus Camunda
 
 
 [![Central](https://img.shields.io/maven-central/v/io.quarkiverse.zeebe/quarkus-zeebe-parent?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.zeebe/quarkus-zeebe-parent)
@@ -8,11 +8,14 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Quarkus [Zeebe](https://docs.camunda.io/docs/components/zeebe/zeebe-overview/) extension. Zeebe’s cloud-native design provides the performance, resilience, and security enterprises need to future-proof their process orchestration efforts.
+Quarkus [Camunda](https://docs.camunda.io/docs/components/orchestration-cluster/) extension. Camunda’s cloud-native design provides the performance, resilience, and security enterprises need to future-proof their process orchestration efforts.
 
 ## Documentation
 
 Refer to the comprehensive [documentation](https://quarkiverse.github.io/quarkiverse-docs/quarkus-zeebe/dev/index.html) for detailed information and usage guidelines.
+
+## Contributing
+For coding guidelines and IDE formatting see [Quarkus Coding Guidelines](https://github.com/quarkusio/quarkus/blob/main/CONTRIBUTING.md#ide-config-and-code-style).
 
 ## Contributors ✨
 
