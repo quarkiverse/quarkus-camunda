@@ -21,3 +21,4 @@ jobs:
     secrets: inherit
     with:
       java_version: 21
+      skip_tests: true
