@@ -443,7 +443,7 @@ public class BaseIT extends BaseTest {
 
 }
 ----
-For more information check examples in the `integration-tests` directory in this repo and the link:++https://docs.camunda.io/docs/apis-tools/testing/getting-started/[official documentation]++[official documentation] by Camunda.
+For more information check examples in the `integration-tests` directory in this repo and the https://docs.camunda.io/docs/apis-tools/testing/getting-started[official documentation] by Camunda.
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
