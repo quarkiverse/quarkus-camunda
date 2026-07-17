@@ -195,6 +195,7 @@ public class CamundaDevServiceProcessor {
                     new CamundaContainerShutdownCloseable(container, FEATURE_NAME),
                     configMap(container.getGrpcApiAddress(), container.getRestApiAddress(),
                             container.getExternalGrpcApiAddress(), container.getExternalRestApiAddress(),
+                            container.getMonitoringApiAddress(),
                             launchMode.isTest()));
         };
 
@@ -204,13 +205,14 @@ public class CamundaDevServiceProcessor {
                     return new CamundaRunningDevService(FEATURE_NAME,
                             containerAddress.getId(),
                             null,
-                            configMap(url, url, url, url, launchMode.isTest()));
+                            configMap(url, url, url, url, url, launchMode.isTest()));
                 })
                 .orElseGet(defaultCamundaBrokerSupplier);
     }
 
     private static Map<String, String> configMap(URI grpcApiUri, URI restApiUri,
-            URI externalGrpcApiUri, URI externalRestApiUri, boolean test) {
+            URI externalGrpcApiUri, URI externalRestApiUri, URI externalMonitoringApiUri,
+            boolean test) {
         Map<String, String> config = new HashMap<>();
         config.put(PROP_CAMUNDA_GATEWAY_ADDRESS, grpcApiUri.toString());
         config.put(PROP_CAMUNDA_REST_ADDRESS, restApiUri.toString());
@@ -218,6 +220,7 @@ public class CamundaDevServiceProcessor {
         if (test) {
             config.put("quarkiverse.camunda.devservices.test.gateway-address", externalGrpcApiUri.toString());
             config.put("quarkiverse.camunda.devservices.test.rest-address", externalRestApiUri.toString());
+            config.put("quarkiverse.camunda.devservices.test.monitoring-address", externalMonitoringApiUri.toString());
         }
         return config;
     }

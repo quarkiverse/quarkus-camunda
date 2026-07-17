@@ -405,9 +405,10 @@ To use the Camunda test extension, add this dependency to the project:
 </dependency>
 ----
 
-This extension is setting up the Camunda Client for the test environment.
+This extension is setting up the Camunda Client and Camunda Process Test Context for the test environment.
 
-To use the `CamundaClient` and `CamundaAssert` in the tests use the `@QuarkusTestResource(CamundaTestResource.class)`:
+To use the `CamundaClient` and `CamundaAssert` in the tests use the `@QuarkusTestResource(CamundaTestResource.class)`.
+If you want to use `CamundaProcessTestContext` you need to annotate it with `@InjectCamundaTestContext`:
 
 Test example
 [source,java]
@@ -423,11 +424,16 @@ public class BaseTest {
     @InjectCamundaClient
     CamundaClient client;
 
+    @InjectCamundTestContext
+    CamundaProcessTestContext testContext;
+
     @Test
     public void startProcessTest() {
         ProcessInstanceEvent event = client.newCreateInstanceCommand()
                 .bpmnProcessId("test").latestVersion()
                 .variables(Map.of("k","v")).send().join();
+
+        testContext.increaseTime(Duration.ofHours(1L));
 
         CamundaAssert.assertThat(event).isCompleted();
     }
