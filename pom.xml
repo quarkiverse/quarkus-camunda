@@ -9,7 +9,7 @@
   <groupId>io.quarkiverse.camunda</groupId>
   <artifactId>quarkus-camunda-parent</artifactId>
   <name>Quarkus - Camunda - Parent</name>
-  <version>999-SNAPSHOT</version>
+  <version>2.1.0</version>
   <packaging>pom</packaging>
   <modules>
     <module>deployment</module>
@@ -20,7 +20,7 @@
     <connection>scm:git:git@github.com:quarkiverse/quarkus-zeebe.git</connection>
     <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-zeebe.git</developerConnection>
     <url>https://github.com/quarkiverse/quarkus-zeebe</url>
-    <tag>HEAD</tag>
+    <tag>2.1.0</tag>
   </scm>
   <properties>
     <quarkus.version>3.37.3</quarkus.version>
