@@ -10,8 +10,6 @@ import static io.quarkiverse.camunda.testcontainer.CamundaContainer.H2Configurat
 import static io.quarkiverse.camunda.testcontainer.CamundaContainer.H2Configuration.ZEEBE_BROKER_EXPORTERS_RDBMS_ARGS_MIN_HISTORY_CLEANUP_INTERVAL;
 import static io.quarkiverse.camunda.testcontainer.CamundaContainer.H2Configuration.ZEEBE_BROKER_EXPORTERS_RDBMS_CLASSNAME;
 import static io.quarkiverse.camunda.testcontainer.CamundaContainer.H2Configuration.databaseUrL;
-import static io.quarkiverse.camunda.testcontainer.CamundaContainerRuntimeEnvs.CAMUNDA_ENV_CAMUNDA_DATABASE_URL;
-import static io.quarkiverse.camunda.testcontainer.CamundaContainerRuntimeEnvs.CAMUNDA_ENV_DATABASE_TYPE;
 import static io.quarkiverse.camunda.testcontainer.CamundaContainerRuntimeEnvs.CAMUNDA_ENV_DATA_SECONDARYSTORAGE_RDBMS_PASSWORD;
 import static io.quarkiverse.camunda.testcontainer.CamundaContainerRuntimeEnvs.CAMUNDA_ENV_DATA_SECONDARYSTORAGE_RDBMS_URL;
 import static io.quarkiverse.camunda.testcontainer.CamundaContainerRuntimeEnvs.CAMUNDA_ENV_DATA_SECONDARYSTORAGE_RDBMS_USERNAME;
@@ -140,8 +138,7 @@ public class CamundaContainer extends GenericContainer<CamundaContainer> impleme
     }
 
     public CamundaContainer withH2() {
-        withEnv(CAMUNDA_ENV_DATABASE_TYPE, DATABASE_TYPE)
-                .withEnv(CAMUNDA_ENV_DATA_SECONDARYSTORAGE_TYPE, DATABASE_TYPE)
+        withEnv(CAMUNDA_ENV_DATA_SECONDARYSTORAGE_TYPE, DATABASE_TYPE)
                 .withEnv(CAMUNDA_ENV_DATA_SECONDARYSTORAGE_RDBMS_URL, databaseUrL(UUID.randomUUID()))
                 .withEnv(CAMUNDA_ENV_DATA_SECONDARYSTORAGE_RDBMS_USERNAME, DATABASE_USERNAME)
                 .withEnv(CAMUNDA_ENV_DATA_SECONDARYSTORAGE_RDBMS_PASSWORD, DATABASE_PASSWORD)
@@ -163,22 +160,6 @@ public class CamundaContainer extends GenericContainer<CamundaContainer> impleme
                 .withEnv(CAMUNDA_ENV_LOGGING_LEVEL_IO_CAMUNDA_DB_RDBMS, LOGGING_LEVEL_IO_CAMUNDA_DB_RDBMS.toString())
                 .withEnv(CAMUNDA_ENV_LOGGING_LEVEL_ORG_MYBATIS, LOGGING_LEVEL_ORG_MYBATIS.toString());
 
-        return this;
-    }
-
-    public CamundaContainer withElasticsearchUrl(final String url) {
-        withEnv(
-                CamundaContainerRuntimeEnvs.CAMUNDA_ENV_CAMUNDA_EXPORTER_CLASSNAME, CAMUNDA_EXPORTER_CLASSNAME);
-        withEnv(CamundaContainerRuntimeEnvs.CAMUNDA_ENV_CAMUNDA_EXPORTER_ARGS_CONNECT_URL, url);
-        withEnv(
-                CamundaContainerRuntimeEnvs.CAMUNDA_ENV_CAMUNDA_EXPORTER_ARGS_BULK_SIZE,
-                CAMUNDA_EXPORTER_BULK_SIZE);
-
-        withEnv(CamundaContainerRuntimeEnvs.CAMUNDA_ENV_OPERATE_ELASTICSEARCH_URL, url);
-
-        withEnv(CamundaContainerRuntimeEnvs.CAMUNDA_ENV_TASKLIST_ELASTICSEARCH_URL, url);
-
-        withEnv(CAMUNDA_ENV_CAMUNDA_DATABASE_URL, url);
         return this;
     }
 
