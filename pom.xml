@@ -24,7 +24,7 @@
   </scm>
   <properties>
     <quarkus.version>4.0.0.Beta1</quarkus.version>
-    <camunda.version>8.10.3</camunda.version>
+    <camunda.version>8.10.6</camunda.version>
     <quarkus-mockserver.version>1.17.0</quarkus-mockserver.version>
   </properties>
   <dependencyManagement>
