@@ -23,8 +23,8 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <quarkus.version>3.40.1</quarkus.version>
-    <camunda.version>8.10.3</camunda.version>
+    <quarkus.version>3.40.1.1</quarkus.version>
+    <camunda.version>8.10.7</camunda.version>
     <quarkus-mockserver.version>1.17.0</quarkus-mockserver.version>
   </properties>
   <dependencyManagement>
