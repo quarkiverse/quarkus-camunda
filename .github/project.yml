@@ -1,4 +1,4 @@
 name: Camunda Quarkus extension
 release:
-  current-version: 3.0.1
+  current-version: 3.0.2
   next-version: 999-SNAPSHOT
