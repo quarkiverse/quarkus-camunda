@@ -34,6 +34,11 @@ public class CreateProcessInstanceCommandStep1Impl extends AbstractStep<ProcessI
     }
 
     @Override
+    public CreateProcessInstanceCommandStep3 versionTag(String versionTag) {
+        return this;
+    }
+
+    @Override
     public CreateProcessInstanceCommandStep3 variables(InputStream variables) {
         return this;
     }
