@@ -6,3 +6,4 @@ metadata:
   - "bpmn"
   categories:
     - "business automation"
+  status: "stable"
